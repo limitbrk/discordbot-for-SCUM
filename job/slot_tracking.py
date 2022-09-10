@@ -1,10 +1,8 @@
 import discord
-import datetime
 import requests
-import urllib.parse
 import logging
 
-async def run(logging: logging, bot: discord.Client,server_id: str) :
+async def run(bot: discord.Client,server_id: str) :
     server_url = "https://api.battlemetrics.com/servers/{0}".format(server_id)
 
     info_response = requests.get(server_url)
@@ -28,5 +26,3 @@ async def run(logging: logging, bot: discord.Client,server_id: str) :
         .replace(str(discord.Status.dnd),"offline")
         .replace(str(discord.Status.idle),"sleep  ")
         ,status_name))
-def encode_time(datetime: datetime.datetime) : 
-    return urllib.parse.quote(datetime.strftime("%Y-%m-%dT%H:%M:%S.000Z"))
