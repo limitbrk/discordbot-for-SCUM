@@ -17,11 +17,11 @@ class LogNotifier :
     # thread = Thread(target = _thread_keep_alive)
     # thread.start()
     
-  def _thread_keep_alive():
-    while self.quitThread == 0:
-        logging.debug("FTP keepalive")
-        self.conn.keep_alive()
-        sleep(300)
+  # def _thread_keep_alive():
+  #   while self.quitThread == 0:
+  #       logging.debug("FTP keepalive")
+  #       self.conn.keep_alive()
+  #       sleep(300)
     
   async def run(self):
     channel = self.bot.get_channel(1018112696580845568)
