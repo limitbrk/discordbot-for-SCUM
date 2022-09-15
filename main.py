@@ -46,4 +46,8 @@ async def update_slot():
 
 # os.system("kill 1") # prevent cloudflare
 route.keep_alive()
-bot.run(TOKEN)
+try:
+  bot.run(TOKEN)
+except:
+  logging.error("Token Error! Kill yourself now!")
+  os.system("kill 1") # prevent cloudflare
