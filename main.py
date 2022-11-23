@@ -1,8 +1,11 @@
+import asyncio
 import os
+import traceback
 import discord
-from discord.ext import tasks
+from discord.ext import tasks, commands
 from dotenv import load_dotenv
 from job import slot_tracking, log_notifier
+from asset import embed
 from server import route
 import logging
 
@@ -26,14 +29,17 @@ logging.basicConfig(
 
 intents = discord.Intents.default()
 intents.message_content = True
-bot = discord.Client(intents=intents)
-log = log_notifier.LogJob(
-  bot, 
-  FTP_CONFIG_HOST,
-  FTP_CONFIG_PORT,
-  FTP_CONFIG_USERNAME,
-  FTP_CONFIG_PASSWORD
-)
+bot = commands.Bot(command_prefix="$", intents=intents)
+log = log_notifier.LogNotifier(bot, FTP_CONFIG)
+
+async def load():
+  for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+      await bot.load_extension(f'cogs.{filename[:-3]}')
+
+@tasks.loop(minutes=1)
+async def update_slot():
+  await slot_tracking.run(bot, SERVER_ID)
 
 @bot.event
 async def on_ready():
@@ -42,10 +48,24 @@ async def on_ready():
   update_slot.start()
   log.add_job(1018112696580845568,FTP_CONFIG_LOGSPATH,"kill")
 
-@tasks.loop(minutes=1)
-async def update_slot():
-    await slot_tracking.run(bot, SERVER_ID)
+@bot.tree.error
+async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError) -> None:
+  logging.error(f"{interaction.user.name}#{interaction.user.discriminator} have ERROR when called \"/{interaction.command.name}\" : {error}")
+  if isinstance(error, discord.app_commands.errors.MissingAnyRole):
+    await interaction.response.send_message(embed=embed.error(f'คุณใช้ไม่มีสิทธิ์ให้ใช้คำสั่งนี้'), ephemeral=True)
+    return
+  else:
+    traceback.print_exc()
+    await interaction.response.send_message(embed=embed.error(f'คำสั่งมีปัญหา ติดต่อแอดมินด่วน!'), ephemeral=True)
 
-# os.system("kill 1") # prevent cloudflare
-route.keep_alive()
-bot.run(TOKEN)
+async def main():
+  await load()
+  route.keep_alive()
+  await bot.start(TOKEN)
+
+
+try:
+  asyncio.run(main())
+except Exception as e:
+  logging.error(f"Token Error! Kill yourself now!: {e}")
+  os.system("kill 1") # prevent cloudflare
