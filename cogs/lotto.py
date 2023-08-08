@@ -3,7 +3,6 @@ from datetime import datetime
 import logging
 import re
 import secrets
-from typing import Tuple
 import discord
 from replit import db
 from discord import app_commands
