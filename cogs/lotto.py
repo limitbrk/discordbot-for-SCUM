@@ -4,14 +4,16 @@ import logging
 import re
 import secrets
 from typing import Tuple
+from zoneinfo import ZoneInfo
 import discord
 from replit import db
 from discord import app_commands
 from discord.ext import commands
 from asset import embed
 
+TZ = ZoneInfo('Asia/Bangkok')
 _lotto_digit=2
-_lotto_pattern=re.compile('^([\d]{%d})$' % (_lotto_digit))
+_lotto_pattern=re.compile('^([\\d]{%d})$' % (_lotto_digit))
 _lotto_ranges="".ljust(_lotto_digit,'0') + " - " + "".ljust(_lotto_digit,'9')
 _mockdata=[]
 for number in range(0, int("".ljust(_lotto_digit,'9'))+1, 1):
@@ -86,7 +88,7 @@ class Lotto(commands.Cog) :
     @app_commands.command(description="[เฉพาะ ADMIN] เริ่มทำการเสี่ยงดวงกับ Lotto")
     @app_commands.checks.has_any_role("ADMIN","👮เจ้าหน้าที่พัสดี")
     async def lotto(self, interaction: discord.Interaction):
-        drawtime = datetime.now().strftime("%d-%m-%y %H:%M:%S")
+        drawtime = datetime.now(TZ).strftime("%d-%m-%y %H:%M:%S")
         result = str(secrets.randbelow(int("".ljust(_lotto_digit,'9'))+1)).zfill(_lotto_digit)
         content = f'@here\nสลากกินไม่แบ่งใครเลย \nงวด {drawtime}\nเลขที่ออกคือ...\n\n'
         await interaction.response.send_message(embed=embed.info(content))

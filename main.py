@@ -1,6 +1,8 @@
 import asyncio
+from datetime import datetime
 import os
 import traceback
+from zoneinfo import ZoneInfo
 import discord
 from discord.ext import tasks, commands
 from dotenv import load_dotenv
@@ -10,6 +12,8 @@ from server import route
 import logging
 
 load_dotenv()
+TZ = ZoneInfo('Asia/Bangkok')
+
 TOKEN = os.getenv('DISCORD_TOKEN')
 SERVER_ID = os.getenv('BATTLEMETRICS_SERVER_ID')
 FTP_CONFIG = {
@@ -26,6 +30,7 @@ FTP_CONFIG = {
   }
 }
 
+logging.Formatter.converter = lambda *args: datetime.now(TZ).timetuple()
 logging.basicConfig(
   format='%(asctime)s %(levelname)-8s %(message)s',
   level=logging.INFO,
