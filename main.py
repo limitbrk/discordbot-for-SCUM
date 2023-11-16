@@ -6,13 +6,14 @@ from zoneinfo import ZoneInfo
 import discord
 from discord.ext import tasks, commands
 from dotenv import load_dotenv
+import pytz
 from job import slot_tracking, log_notifier
 from asset import embed
 from server import route
 import logging
 
 load_dotenv()
-TZ = ZoneInfo('Asia/Bangkok')
+TZ = pytz.timezone('Asia/Bangkok')
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 SERVER_ID = os.getenv('BATTLEMETRICS_SERVER_ID')

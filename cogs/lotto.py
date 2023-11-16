@@ -3,15 +3,14 @@ from datetime import datetime
 import logging
 import re
 import secrets
-from typing import Tuple
-from zoneinfo import ZoneInfo
 import discord
+import pytz
 from replit import db
 from discord import app_commands
 from discord.ext import commands
 from asset import embed
 
-TZ = ZoneInfo('Asia/Bangkok')
+TZ = pytz.timezone('Asia/Bangkok')
 _lotto_digit=2
 _lotto_pattern=re.compile('^([\\d]{%d})$' % (_lotto_digit))
 _lotto_ranges="".ljust(_lotto_digit,'0') + " - " + "".ljust(_lotto_digit,'9')
