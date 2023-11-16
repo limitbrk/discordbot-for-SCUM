@@ -2,7 +2,6 @@ import asyncio
 from datetime import datetime
 import os
 import traceback
-from zoneinfo import ZoneInfo
 import discord
 from discord.ext import tasks, commands
 from dotenv import load_dotenv
