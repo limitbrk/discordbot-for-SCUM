@@ -14,9 +14,6 @@ TZ = pytz.timezone('Asia/Bangkok')
 _lotto_digit=2
 _lotto_pattern=re.compile('^([\\d]{%d})$' % (_lotto_digit))
 _lotto_ranges="".ljust(_lotto_digit,'0') + " - " + "".ljust(_lotto_digit,'9')
-_mockdata=[]
-for number in range(0, int("".ljust(_lotto_digit,'9'))+1, 1):
-    _mockdata.append(str(number).zfill(_lotto_digit))
 
 class Lotto(commands.Cog) :
     def __init__(self, bot: commands.Bot):
@@ -25,40 +22,6 @@ class Lotto(commands.Cog) :
     @commands.Cog.listener()
     async def on_ready(self) : 
         logging.info('Lotto Command Ready')
-
-    @commands.command()
-    async def sync(self, ctx) -> None :
-        fmt = await ctx.bot.tree.sync()
-        await ctx.send(
-            f"Synced {len(fmt)} commands to this world!"
-        )
-        return
-
-    @commands.command()
-    async def test_win(self, ctx) -> None :
-        user_info = db.get(f"user_{ctx.author.id}") 
-        db.set(f"user_{ctx.author.id}",{
-            **user_info,
-            "credit" : 0,
-            "lottos" : _mockdata
-        })
-        await ctx.send(
-            f"You will win next round"
-        )
-        return
-
-    @commands.command()
-    async def test_lose(self, ctx) -> None :
-        user_info = db.get(f"user_{ctx.author.id}") 
-        db.set(f"user_{ctx.author.id}",{
-            **user_info,
-            "credit" : int("".ljust(_lotto_digit,'9'))+1,
-            "lottos" : []
-        })
-        await ctx.send(
-            f"You will lose next round"
-        )
-        return
 
     # GIVE
     @app_commands.command(description="[เฉพาะ ADMIN] ให้จำนวนการซื้อหวยแก่ผู้เล่น สำหรับเล่น Lotto")

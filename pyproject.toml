@@ -1,24 +1,21 @@
 [tool.poetry]
-name = "python-template"
+name = "discordbot-for-scum"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["chaiyatat.m"]
+readme = "README.md"
+packages = [{include = "discordbot_for_scum"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8.0,<3.9"
-numpy = "^1.22.2"
-replit = "^3.2.4"
-Flask = "^2.2.0"
-Flag = "^0.1.1"
-python-dotenv = "^0.21.0"
-requests = "^2.28.1"
-discord = "^2.0.0"
+python = "^3.10"
+flask = ">=2.0,<2.3"
+python-dotenv = "^1.0.0"
+pytz = "2023.3.post1"
+replit = "3.3.2"
+requests = "2.31.0"
+lxml = "4.9.3"
 
-[tool.poetry.dev-dependencies]
-debugpy = "^1.6.2"
-python-lsp-server = {extras = ["yapf", "rope", "pyflakes"], version = "^1.5.0"}
-toml = "^0.10.2"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
