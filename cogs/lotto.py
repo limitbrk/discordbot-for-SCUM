@@ -52,7 +52,7 @@ class Lotto(commands.Cog) :
     async def lotto(self, interaction: discord.Interaction):
         drawtime = datetime.now(TZ).strftime("%d-%m-%y %H:%M:%S")
         result = str(secrets.randbelow(int("".ljust(_lotto_digit,'9'))+1)).zfill(_lotto_digit)
-        content = f'@here\nสลากกินไม่แบ่งใครเลย \nงวด {drawtime}\nเลขที่ออกคือ...\n\n'
+        content = f'@here\nสลากกินไม่แบ่งใครเลย \nงวด {drawtime}\nเลขที่ออกคือ...\n\n# '
         await interaction.response.send_message(embed=embed.info(content))
         content = content+"`"
         for char in result :
@@ -64,7 +64,7 @@ class Lotto(commands.Cog) :
         for user in all_user:
             user_info = db.get(user)
             if result in user_info["lottos"]:
-                winners.append(f'<@{user.replace("user_","")}> (ซื้อไป: {len(user_info["lottos"])})')
+                winners.append(f'<@{user.replace("user_","")}>')
             await self._reset_lottos(user,user_info,drawtime,result)
         if len(winners) > 0:
             content = content+"`\n\nยินดีด้วยกับผู้ชนะ!"

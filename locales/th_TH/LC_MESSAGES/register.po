@@ -1,0 +1,74 @@
+# Thai (Thailand) translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-11-25 06:30+0000\n"
+"PO-Revision-Date: 2023-11-24 19:47+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: th_TH\n"
+"Language-Team: th_TH <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: cogs/register.py:85
+msgid ""
+"When you click **⏩{next}** button that mean you have read and accepted "
+"these rules"
+msgstr "เมื่อกดปุ่ม **⏩{next}** นั่นหมายความว่าคุณยอมรับและทำตามกฎดังกล่าว"
+
+#: cogs/register.py:85 cogs/register.py:101
+msgid "Next"
+msgstr "ถัดไป"
+
+#: cogs/register.py:90
+msgid "Please read these rule before continue..."
+msgstr "กรุณาอ่านกฎก่อนเริ่มลงทะเบียน..."
+
+#: cogs/register.py:114
+msgid "Fill Information"
+msgstr "กรุณากรอกข้อมูล"
+
+#: cogs/register.py:117
+msgid "SteamID64 (Can be find in - steamid.xyz)"
+msgstr "SteamID64 (หาได้จาก - steamid.xyz)"
+
+#: cogs/register.py:118
+msgid "17 digits of number"
+msgstr "ตัวเลข 17 หลัก"
+
+#: cogs/register.py:130
+msgid "Invalid SteamID Please try again"
+msgstr "SteamID ผิดลองใหม่อีกครั้ง"
+
+#: cogs/register.py:133
+msgid "This is your Steam?"
+msgstr "นี่คือ Steam ของคุณถูกต้องหรือไม่?"
+
+#: cogs/register.py:144
+msgid "No"
+msgstr "ไม่"
+
+#: cogs/register.py:151
+msgid "Yes"
+msgstr "ใช่"
+
+#: cogs/register.py:162
+msgid "Register Success"
+msgstr "ลงทะเบียนเรียบร้อย"
+
+#: cogs/register.py:163
+msgid "Can join our server here {channel}"
+msgstr "สามารถเข้า Server ได้เลยที่ {channel}"
+
+#: cogs/register.py:173
+msgid "┌ {mention} used command `/register`"
+msgstr "┌ {mention} ได้ใช้คำสั่ง `/register`"
+

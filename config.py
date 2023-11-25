@@ -12,10 +12,21 @@ class Config:
       "username": os.getenv('FTP_USERNAME'),
       "password": os.getenv('FTP_PASSWORD'),
       "logspath": os.getenv('FTP_LOGS_FOLDER_PATH'),
-      "channel": {
-        "kill": os.getenv('CHANNEL_ID_KILL_LOGS'),
-        "mines": os.getenv('CHANNEL_ID_MINES_LOGS'),
-        "economy": os.getenv('CHANNEL_ID_ECOMONY_LOGS'),
-        "chat": os.getenv('CHANNEL_ID_CHAT_LOGS')
+    }
+    self.channels = {
+      "kill": os.getenv('CHANNEL_ID_KILL_LOGS'),
+      "mines": os.getenv('CHANNEL_ID_MINES_LOGS'),
+      "economy": os.getenv('CHANNEL_ID_ECOMONY_LOGS'),
+      "chat": os.getenv('CHANNEL_ID_CHAT_LOGS'),
+      "rules": {
+        "th": os.getenv('CHANNEL_ID_RULES_TH',"").split(","),
+        "en": os.getenv('CHANNEL_ID_RULES_EN',"").split(","),
+      }
+    }
+    self.roles = {
+      "member": os.getenv('ROLE_ID_MEMBER'),
+      "lang": {
+        "th": os.getenv('ROLE_ID_LANG_TH'),
+        "en": os.getenv('ROLE_ID_LANG_EN'),
       }
     }
