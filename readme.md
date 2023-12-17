@@ -21,6 +21,7 @@ $ pybabel init -l {lang} -D {domain} -i locales/{domain}.pot -d locales
 $ pybabel update -D {domain} -i locales/{domain}.pot -d locales
 ```
 get lang by `$ pybabel --list-locales`
+
 3. generate mo
 ```bash
 $ pybabel compile -D {domain} -d locales
