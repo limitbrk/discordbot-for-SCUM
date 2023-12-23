@@ -167,10 +167,12 @@ class Register(commands.Cog):
       await interaction.response.send_modal(Register.Step3Modal(self.lang))
 
     async def yes_callback(self, interaction: discord.Interaction):
+      title = _("Can join our server here {channel}",self.lang).format(channel="<#1016360910656389150>")
+      title += "\n" + _("Welcome pack is ready {channel}", self.lang).format(channel="<#1016608862780002344>")
+      
       register_embed = embed.register_info(
           _("Register Success", self.lang),
-          _("Can join our server here {channel}",
-            self.lang).format(channel="<#1016360910656389150>"),
+          title,
           interaction.user, self.steam_profile)
 
       roles = discord.utils.get(interaction.guild.roles,

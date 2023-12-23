@@ -1,5 +1,4 @@
 import discord
-import logging
 
 def info(body: str):
     embed=discord.Embed(color=0xfe9ab8)

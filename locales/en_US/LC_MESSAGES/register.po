@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-25 06:30+0000\n"
+"POT-Creation-Date: 2023-12-23 08:45+0000\n"
 "PO-Revision-Date: 2023-11-24 20:17+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en_US\n"
@@ -18,57 +18,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
 
-#: cogs/register.py:85
+#: cogs/register.py:95
 msgid ""
 "When you click **⏩{next}** button that mean you have read and accepted "
 "these rules"
 msgstr ""
 
-#: cogs/register.py:85 cogs/register.py:101
+#: cogs/register.py:97 cogs/register.py:110
 msgid "Next"
 msgstr ""
 
-#: cogs/register.py:90
+#: cogs/register.py:101
 msgid "Please read these rule before continue..."
 msgstr ""
 
-#: cogs/register.py:114
+#: cogs/register.py:123
 msgid "Fill Information"
 msgstr ""
 
-#: cogs/register.py:117
+#: cogs/register.py:126
 msgid "SteamID64 (Can be find in - steamid.xyz)"
 msgstr ""
 
-#: cogs/register.py:118
+#: cogs/register.py:127
 msgid "17 digits of number"
 msgstr ""
 
-#: cogs/register.py:130
+#: cogs/register.py:139
 msgid "Invalid SteamID Please try again"
 msgstr ""
 
-#: cogs/register.py:133
+#: cogs/register.py:143
 msgid "This is your Steam?"
 msgstr ""
 
-#: cogs/register.py:144
+#: cogs/register.py:157
 msgid "No"
 msgstr ""
 
-#: cogs/register.py:151
+#: cogs/register.py:161
 msgid "Yes"
 msgstr ""
 
-#: cogs/register.py:162
-msgid "Register Success"
-msgstr ""
-
-#: cogs/register.py:163
+#: cogs/register.py:170
 msgid "Can join our server here {channel}"
 msgstr ""
 
-#: cogs/register.py:173
+#: cogs/register.py:171
+msgid "Welcome pack is ready {channel}"
+msgstr ""
+
+#: cogs/register.py:174
+msgid "Register Success"
+msgstr ""
+
+#: cogs/register.py:184
 msgid "┌ {mention} used command `/register`"
 msgstr ""
 
