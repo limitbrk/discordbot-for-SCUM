@@ -33,7 +33,7 @@ def getSteamProfile(steam_id: str) -> dict[str, str] | None:
     if len(response_json["response"]["players"]) > 0:
       profile = response_json["response"]["players"][0]
       value["id"] = profile["steamid"]
-      value["url"] = profile["profileurl"]
+      value["url"] = f'https://steamcommunity.com/profiles/{profile["steamid"]}'
       value["name"] = profile["personaname"]
       value["avatar"] = profile["avatarfull"]
       return value
