@@ -5,6 +5,7 @@ class Config:
   def __init__(self):
     load_dotenv()
     self.discord_token = os.getenv('DISCORD_TOKEN') or ""
+    self.steam_token = os.getenv('STEAM_TOKEN') or ""
     self.server_id = os.getenv('BATTLEMETRICS_SERVER_ID') or ""
     self.ftp_config = {
       "host": os.getenv('FTP_HOST'),

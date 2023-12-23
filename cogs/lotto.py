@@ -93,6 +93,7 @@ class Lotto(commands.Cog) :
             await asyncio.sleep(1)
             content = content+char
             await interaction.edit_original_response(embed=embed.info(content+'`'))
+        content = content+"`"
         
         # Get Winner
         lotto = self._dbget()
