@@ -10,6 +10,8 @@ from asset import embed
 from server import route
 import logging
 from config import Config
+import pkgutil
+import cogs
 
 config = Config()
 TZ = pytz.timezone('Asia/Bangkok')
@@ -25,11 +27,6 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="$", intents=intents)
 log = log_notifier.LogNotifier(bot, config.ftp_config)
 
-async def load():
-  for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-      await bot.load_extension(f'cogs.{filename[:-3]}')
-
 @tasks.loop(minutes=1)
 async def update_slot():
   await slot_tracking.run(bot, config.server_id)
@@ -37,9 +34,7 @@ async def update_slot():
 @bot.event
 async def on_ready():
   logging.debug(f'{bot.user} has connected to Discord!')
-  logging.debug(f'Now tracked BattleMetrics ID "{config.server_id}"')
   update_slot.start()
-  # LogNotifier.run()
 
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: discord.app_commands.AppCommandError) -> None:
@@ -52,15 +47,17 @@ async def on_app_command_error(interaction: discord.Interaction, error: discord.
     await interaction.response.send_message(embed=embed.error(f'คำสั่งมีปัญหา ติดต่อแอดมินด่วน!'), ephemeral=True)
 
 async def main():
-  await load()
-  route.keep_alive()
-  await bot.start(config.discord_token)
+  async with bot:
+    route.start()
+    for _, name, ispkg in pkgutil.iter_modules(cogs.__path__):
+      await bot.load_extension(f'cogs.{name}')
+    await bot.start(config.discord_token)
 
 try:
     asyncio.run(main())
 except KeyboardInterrupt:
     logging.info("KeyboardInterrupt: Exiting the program")
     os._exit(1)
-except Exception as e:
-    logging.error(f"Bot Error! Kill yourself now!: {e}")
-    os.system("kill 1") # prevent cloudflare
+# except Exception as e:
+#     logging.error(f"Bot Error! Kill yourself now!: {e}")
+#     os.system("kill 1") # prevent cloudflare

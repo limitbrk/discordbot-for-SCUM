@@ -1,16 +1,19 @@
 import asyncio
 from datetime import datetime
+import json
 import logging
 import typing
 import re
 import secrets
 import discord
 import pytz
-from replit import db
+import redis
 from discord import app_commands
 from discord.ext import commands
 from asset import embed
+from config import Config
 
+config = Config()
 TZ = pytz.timezone('Asia/Bangkok')
 _lotto_digit=2
 _lotto_pattern=re.compile('^([\\d]{%d})$' % (_lotto_digit))
@@ -21,16 +24,17 @@ for _number in range(0, int("".ljust(_lotto_digit,'9'))+1, 1):
 
 class Lotto(commands.Cog) :
     def __init__(self, bot: commands.Bot):
-        # Reset Database each restart
-        # for i in db.keys() :
-        #   del db[i]
+        self.db = redis.from_url(config.redis_conn)
         self.bot = bot
 
     def _dbget(self):
-        return db.get('lotto', {})
+        data = self.db.get('lotto')
+        if data is None:
+            return {}
+        return json.loads(data)
 
     def _dbset(self, value: typing.Any):
-        db.set('lotto', value)
+        self.db.set('lotto', json.dumps(value))
 
     def _prefix(self, obj: typing.Any, prefix: str):
       return [key for key in obj if key.startswith(prefix)]

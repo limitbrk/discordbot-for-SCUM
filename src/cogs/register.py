@@ -81,7 +81,7 @@ class Register(commands.Cog):
     async def assign_lang_roles(self, interaction: discord.Interaction,
                                 lang: str):
       id = config.roles["lang"][lang]
-      if id is not None:
+      if id is not None and id != '':
         roles = discord.utils.get(interaction.guild.roles, id=int(id))
         await interaction.user.add_roles(roles, reason="Lang Set")
 
