@@ -8,23 +8,23 @@ def info(body: str):
     return embed
 
 def steam_info(title: str, steam_info: dict[str, str]):
-  embed=discord.Embed(title=title, color=0x2a475e)
-  embed.set_thumbnail(url=steam_info["avatar"])
-  embed.add_field(name="Profile", value=f"[{steam_info['name']}]({steam_info['url']})", inline=False)
-  embed.add_field(name="SteamID64 (Dec)", value=steam_info["id"], inline=False)
-  return embed
+    embed=discord.Embed(title=title, color=0x2a475e)
+    embed.set_thumbnail(url=steam_info["avatar"])
+    embed.add_field(name="Profile", value=f"[{steam_info['name']}]({steam_info['url']})", inline=False)
+    embed.add_field(name="SteamID64 (Dec)", value=steam_info["id"], inline=False)
+    return embed
 
 def register_desc(title: str, desc: str|None = None):
-  embed=discord.Embed(title=title, color=0xfe9ab8, description=desc)
-  return embed
+    embed=discord.Embed(title=title, color=0xfe9ab8, description=desc)
+    return embed
 
 def register_info(title: str, desc: str, discord_user: discord.User|discord.Member, steam_info: dict[str, str]):
-  embed=discord.Embed(title=title, color=0xffac1c, description=desc)
-  embed.set_thumbnail(url=str(discord_user.display_avatar.url.split("?")[0]))
-  embed.add_field(name="Discord Name", value=discord_user.mention, inline=False)
-  embed.add_field(name="Steam Profile", value=f"[{steam_info['name']}]({steam_info['url']})", inline=False)
-  embed.add_field(name="SteamID64 (Dec)", value=steam_info["id"], inline=False)
-  return embed
+    embed=discord.Embed(title=title, color=0xffac1c, description=desc)
+    embed.set_thumbnail(url=str(discord_user.display_avatar.url.split("?")[0]))
+    embed.add_field(name="Discord Name", value=discord_user.mention, inline=False)
+    embed.add_field(name="Steam Profile", value=f"[{steam_info['name']}]({steam_info['url']})", inline=False)
+    embed.add_field(name="SteamID64 (Dec)", value=steam_info["id"], inline=False)
+    return embed
 
 def error(err: str):
     embed=discord.Embed(color=0xfe9ab8)

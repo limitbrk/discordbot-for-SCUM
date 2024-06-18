@@ -40,19 +40,19 @@ class Lotto(commands.Cog) :
       return [key for key in obj if key.startswith(prefix)]
 
     async def _reset_lottos(self, user_id: str, user_info, drawtime: str, result: str):
-      insert = {
-        user_id: {
-            **user_info,
-            "history": {
-                "drawtime": drawtime,
-                "win": result in user_info["lottos"],
-                "amount": len(user_info["lottos"]),
-                "lottos": ", ".join(user_info["lottos"]).replace(result,f"__{result}__")
-            },
-            "lottos": []
+        insert = {
+            user_id: {
+                **user_info,
+                "history": {
+                    "drawtime": drawtime,
+                    "win": result in user_info["lottos"],
+                    "amount": len(user_info["lottos"]),
+                    "lottos": ", ".join(user_info["lottos"]).replace(result,f"__{result}__")
+                },
+                "lottos": []
+            }
         }
-      }
-      self._dbset(insert)
+        self._dbset(insert)
 
     @commands.Cog.listener()
     async def on_ready(self) : 
@@ -153,7 +153,7 @@ class Lotto(commands.Cog) :
         if not user_info or user_info['credit'] < len(_mockdata):
             credit = 0
             if user_info:
-              credit = user_info['credit']
+                credit = user_info['credit']
             await interaction.response.send_message(embed=embed.info(f'จำนวนการซื้อหวยไม่เพียงพอ ต้องซื้อเพิ่มอีก `{len(_mockdata) - credit}` จำนวน กรุณาติดต่อแอดมินเพื่อซื้อเพิ่ม'), ephemeral=True)
             return
         if len(user_info['lottos']) > 0 :
@@ -186,9 +186,9 @@ class Lotto(commands.Cog) :
         user_target = f'user_{interaction.user.id}'
         user_info = lotto.get(user_target, None)
         if user_info and "history" in user_info :
-          await interaction.response.send_message(embed=embed.info(f'__ประวัติการซื้อหวยรอบที่ผ่านมา ของงวด {user_info["history"]["drawtime"]}__ \n {"ถูกรางวัล" if user_info["history"]["win"] else "พลาดรางวัล"} จากจำนวน {user_info["history"]["amount"]} ใบ: \n{user_info["history"]["lottos"]}'), ephemeral=True)
+            await interaction.response.send_message(embed=embed.info(f'__ประวัติการซื้อหวยรอบที่ผ่านมา ของงวด {user_info["history"]["drawtime"]}__ \n {"ถูกรางวัล" if user_info["history"]["win"] else "พลาดรางวัล"} จากจำนวน {user_info["history"]["amount"]} ใบ: \n{user_info["history"]["lottos"]}'), ephemeral=True)
         else :
-          await interaction.response.send_message(embed=embed.info(f'ไม่มีประวัติการซื้อหวยรอบที่ผ่านมา'), ephemeral=True)
+            await interaction.response.send_message(embed=embed.info(f'ไม่มีประวัติการซื้อหวยรอบที่ผ่านมา'), ephemeral=True)
     
 
 async def setup(bot: commands.Bot):
