@@ -15,7 +15,7 @@
     },
     "step1":{
         "title": "Please read these rule before continue...",
-        "desc": "{0}\n\n When you click **{1}{2}** button that mean you have read and accepted.\n\n **Next step required [your SteamID](//steamid.xyz)",
+        "desc": "{0}\n\n When you click **{1}{2}** button that mean you have read and accepted.\n\n **Next step required [your SteamID](https://steamid.xyz)",
         "btn": {
             "next": {
                 "text": "Next",
