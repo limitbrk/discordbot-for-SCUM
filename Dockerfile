@@ -10,7 +10,7 @@ RUN npm run build
 #Production stage
 FROM node:20-alpine AS production
 WORKDIR /app
-COPY --from=build package*.json .
+COPY --from=build /app/package*.json .
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
 CMD ["node", "dist/index.js"]
