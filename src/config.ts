@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { ConfigUtils } from './utils/config/ConfigUtils';
+import { ConfigUtils } from './utils';
 dotenv.config();
 
 const config = {

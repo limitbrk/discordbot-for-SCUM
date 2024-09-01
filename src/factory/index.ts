@@ -1,7 +1,3 @@
-import { CommandFactory } from "./CommandFactory";
-import { LocaleFactory } from "./LocaleFactory";
-
-export {
-    CommandFactory,
-    LocaleFactory,
-}
+export * from "./ApplicationFactory";
+export * from "./CommandFactory";
+export * from "./LocaleFactory";

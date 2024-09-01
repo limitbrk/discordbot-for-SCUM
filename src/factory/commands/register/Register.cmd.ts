@@ -1,10 +1,10 @@
-import { CacheType, channelMention, CommandInteraction, ComponentType, ModalSubmitInteraction, SlashCommandBuilder } from 'discord.js';
+import { ButtonInteraction, CacheType, channelMention, CommandInteraction, ComponentType, InteractionCollector, InteractionReplyOptions, ModalSubmitInteraction, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../Config';
 import { RegisterMsg } from './message/RegisterMsg';
-import { ApplicationFactory } from '../../ApplicationFactory';
 import { ErrorCode } from '../../../constant/ErrorCode';
 import { SteamProfile, CommandError } from '../../../model';
+import { ApplicationFactory } from '../..';
 
 const regTime: number = config.SETTING.REGISTER.WAITTIME
 const rulecode: string = config.SETTING.REGISTER.RULE_CODE
@@ -23,60 +23,64 @@ module.exports = {
 		let steamProfile : SteamProfile;
 		
 		interaction.reply(RegisterMsg.init()).then( i => i.awaitMessageComponent({filter, componentType: ComponentType.Button, time: regTime}))
-			// STEP 1
+			// STEP 1 : Read Rule
 			.then( i => {txnLang = i.customId; return i.deferUpdate();})
 			.then( i => i.edit(RegisterMsg.step1(txnLang, rules[txnLang])))
 			.then( i => {
-				// STEP 2
-				return new Promise<ModalSubmitInteraction<CacheType>>((resolve, reject)=>{
-					const collector = i.createMessageComponentCollector({filter, componentType: ComponentType.Button, time: regTime})
-					collector.on("collect", i => {
-						i.showModal(RegisterMsg.step2(txnLang)).then(() =>
-							i.awaitModalSubmit({filter, time: regTime}).then(i => {
-								collector.stop("success")
-								resolve(i)
-							})
-						);
-						
+				// STEP 2 : Type Info on Modal
+				return new Promise((resolve, reject)=>{
+					const modalCollector = i.createMessageComponentCollector({filter, componentType: ComponentType.Button, time: regTime})
+					let initedAwaitModal = false;
+					modalCollector.on("collect", i => {
+						if(['step1.btn.next','step3.btn.back'].includes(i.customId)){
+							i.showModal(RegisterMsg.step2(txnLang))
+							if(!initedAwaitModal){
+								initedAwaitModal = true;
+								i.awaitModalSubmit({filter, time: regTime}).then( i => {
+									// Validate
+									const id = i.fields.getTextInputValue("step2.question1")
+									const rc = i.fields.getTextInputValue("step2.question2")
+									i.deferUpdate().then( async i => {
+										if (rc !== rulecode){
+											return reject(new CommandError(ErrorCode.INVALID_RULECODE));
+										}
+										try {
+											steamProfile = await app.steamProfileRepo.getPlayerByID64(id)
+										} catch (e) {
+											reject(e)
+										}
+										initedAwaitModal = false;
+										i.edit(RegisterMsg.step3(txnLang, steamProfile)).catch( e => reject(e))
+									});
+								})
+							}
+						} else if (i.customId === "step3.btn.next") {
+							modalCollector.stop("success");
+							interaction.deleteReply();
+							interaction.channel?.send(RegisterMsg.finish(txnLang, i.user, steamProfile));
+						} else {
+							reject("No Custom ID Found")
+						}
 					})
 
-					collector.on("end", (collected, reason) => {
+					modalCollector.on("end", (collected, reason) => {
 						if (reason !== "time" && reason !== "success" ) {
+							console.log("got Error inside end")
 							reject(new Error(reason));
 						}
 					});
 				})
 			})
-			.then( i => { 
-				const replyI = i.deferUpdate()
-				const id = i.fields.getTextInputValue("step2.question1")
-				const rc = i.fields.getTextInputValue("step2.question2")
-				if (rc !== rulecode){
-					return Promise.reject(new CommandError(ErrorCode.INVALID_RULECODE))
-				}
-				return app.steamProfileRepo.getPlayerByID64(id).then((profile) => {
-					steamProfile = profile;
-					return replyI;
-				},(err)=> {console.log("THIS THROW?");throw err})
-			})
-			// Step 3 
-			.then( i => i.edit(RegisterMsg.step3(txnLang, steamProfile)))
-			.then( i => i.awaitMessageComponent({filter, componentType: ComponentType.Button, time: regTime}))
-			.then( i => {
-				if (i.customId === "step3.btn.next"){
-					interaction.deleteReply();
-					interaction.channel?.send(RegisterMsg.finish(txnLang, i.user, steamProfile));
-				} else if(i.customId === "step3.btn.back") {
-					// Go back to step2
-					
-				}
-			})
 			.catch((err: CommandError | Error) => {
+				console.log("got Error outside")
+				if(!interaction.deferred && !interaction.replied){
+					interaction.deferReply();
+				}
 				if(err instanceof CommandError) {
-					interaction.editReply(err.getDiscordMessage())
+					interaction.editReply(err.getDiscordMessage(txnLang))
 				} else {
 					console.log(err);
-					interaction.editReply(new CommandError(err.message).getDiscordMessage())
+					interaction.editReply(new CommandError(err.message).getDiscordMessage(txnLang))
 				}
 			})
 	},

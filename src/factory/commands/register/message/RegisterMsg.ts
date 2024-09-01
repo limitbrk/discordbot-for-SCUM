@@ -1,9 +1,8 @@
 import { ActionRowBuilder, BaseMessageOptions, ButtonBuilder, ButtonStyle, channelMention, InteractionReplyOptions, ModalComponentData, TextInputBuilder, TextInputStyle, User, userMention } from "discord.js";
-import { EmbedBuilderUtil } from "../../../../utils/message/EmbedBuilder";
 import { getFixedT } from "i18next";
-import { StringUtils } from "../../../../utils/data/StringUtils";
 import config from "../../../../Config";
 import { SteamProfile } from "../../../../model";
+import { EmbedBuilderUtil, StringUtils } from "../../../../utils";
 
 export class RegisterMsg {
     private static readonly namespace: string = "register"; // Define the namespace

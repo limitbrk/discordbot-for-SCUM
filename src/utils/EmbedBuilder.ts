@@ -1,6 +1,6 @@
 import { EmbedBuilder, User, userMention } from 'discord.js';
-import { Color } from '../../constant/Color';
-import { SteamProfile } from '../../model';
+import { Color } from '../constant/Color';
+import { SteamProfile } from '../model';
 
 export class EmbedBuilderUtil {
 
@@ -16,7 +16,7 @@ export class EmbedBuilderUtil {
             .setTitle(title)
             .setDescription(desc)
             .setColor(Color.BLUE_STEAM)
-            .setThumbnail(steamInfo.avatar)
+            .setThumbnail(steamInfo.avatarfull)
             .addFields(
                 { name: "Steam Profile", value: `[${steamInfo.personaname}](${steamInfo.profileUrl})`},
                 { name: "SteamID64 (Dec)", value: steamInfo.steamid}
@@ -36,12 +36,12 @@ export class EmbedBuilderUtil {
             );
     }
 
-    static error(title: string, desc: string = "This is a internal Error"): EmbedBuilder {
+    static error(title: string, desc: string = "This is a internal Error", footer: string= "Please contact admin. If any defect"): EmbedBuilder {
         return new EmbedBuilder()
             .setTitle("Happy Bot")
             .addFields({ name: title, value: desc, inline: false })
             .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Error.svg/1200px-Error.svg.png")
-            .setFooter({ text: "Please contact admin. If any defect" })
+            .setFooter({ text: footer })
             .setColor(Color.RED);
     }
 }

@@ -1,5 +1,5 @@
 import { InteractionReplyOptions } from "discord.js";
-import { EmbedBuilderUtil } from "../utils/message/EmbedBuilder";
+import { EmbedBuilderUtil } from "../utils";
 import { getFixedT } from "i18next";
 import { ErrorCode } from "../constant/ErrorCode";
 
@@ -10,7 +10,7 @@ export class CommandError extends Error {
         const desc = this.isCommandError() ? _(this.message+".desc") : _("core.errDesc")
         return {
             content: '',
-            embeds: [EmbedBuilderUtil.error(message,desc)],
+            embeds: [EmbedBuilderUtil.error(message,desc,_("core.errFooter"))],
             components: [],
         }
     }

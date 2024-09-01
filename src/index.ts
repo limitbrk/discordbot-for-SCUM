@@ -1,7 +1,6 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import config from "./Config";
-import { CommandFactory, LocaleFactory } from "./factory";
-import { ApplicationFactory } from "./factory/ApplicationFactory";
+import { ApplicationFactory, CommandFactory, LocaleFactory } from "./factory";
 
 LocaleFactory.load();
 

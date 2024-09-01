@@ -1,4 +1,5 @@
-import { StringUtils } from "../data/StringUtils";
+import { StringUtils } from "./StringUtils";
+
 
 export class ConfigUtils {
     private static isNumberRegex = new RegExp(/^([0-9]+)(\.)?([0-9]+)?$/)
