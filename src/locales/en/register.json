@@ -30,7 +30,7 @@
             "placeholder": "17 digits"
         },
         "question2": {
-            "label": "Rule read code (In rule section)",
+            "label": "Rule read code (In rule Channel)",
             "placeholder": "4 digits"
         },
         "btn": {
@@ -43,7 +43,7 @@
         }
     },
     "step3":{
-        "title": "Info confirmation",
+        "title": "Info Confirmation",
         "desc": "This is your Info?",
         "btn": {
             "next": {
