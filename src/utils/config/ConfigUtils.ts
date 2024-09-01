@@ -9,7 +9,6 @@ export class ConfigUtils {
         for (const key in config) {
             const envKey = (prefix ? prefix + '_' : '') + key;
             const envVal = env[envKey]
-            console.log('Detect '+envKey )
     
             switch (typeof config[key]) {
                 case 'object':

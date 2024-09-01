@@ -1,0 +1,4 @@
+export enum ErrorCode {
+    INVALID_RULECODE = "INVALID_RULECODE",
+    INVALID_STEAMID = "INVALID_STEAMID",
+}

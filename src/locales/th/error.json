@@ -1,0 +1,15 @@
+{
+    "core":{
+        "errTitle":"เกิดข้อผิดพลาด",
+        "errDesc":"มีปัญหา internal error",
+        "errFooter":"กรุณาทำรายการอีกครั้งหรือ ติดต่อแอดมิน"
+    },
+    "INVALID_RULECODE":{
+        "title": "Rule Code ไม่ถูกต้อง",
+        "desc": "กรุณากลับไปช่องกฎ. และทำรายการใหม่อีกครั้ง"
+    },
+    "INVALID_STEAMID":{
+        "title": "SteamID ไม่ถูกต้อง",
+        "desc": "เช็ค SteamID และทำรายการใหม่อีกครั้ง"
+    }
+}

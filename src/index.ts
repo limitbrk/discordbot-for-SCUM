@@ -1,17 +1,19 @@
-import config from "./config";
+import { Client, Events, GatewayIntentBits } from "discord.js";
+import config from "./Config";
+import { CommandFactory, LocaleFactory } from "./factory";
+import { ApplicationFactory } from "./factory/ApplicationFactory";
 
-// Require the necessary discord.js classes
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+LocaleFactory.load();
 
-// Create a new client instance
+const app = new ApplicationFactory(config);
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// When the client is ready, run this code (only once).
-// The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
-// It makes some properties non-nullable.
-client.once(Events.ClientReady, (readyClient: { user: { tag: any; }; }) => {
-	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+client.once(Events.ClientReady, (readyClient: any) => {
+	console.log(`Ready! Logged in as "${readyClient.user.tag}"`);
 });
 
-// Log in to Discord with your client's token
+const commands = new CommandFactory(app);
+commands.listenInteraction(client);
+
 client.login(config.DISCORD.TOKEN);
