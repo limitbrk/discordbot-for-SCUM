@@ -58,9 +58,11 @@ export class CommandFactory{
 				return;
 			}
 			try {
-				logger.info(`ENTERING: User @${interaction.user.tag}\t -> ${interaction.commandName}`);
+				
+				const logSuffix = `User @${interaction.user.tag}\t -> ${interaction.commandName}`;
+				logger.info(`ENTERING: ${logSuffix}`);
 				await command.execute(this.app, interaction);
-				logger.info(`SUCCESS : User @${interaction.user.tag}\t -> ${interaction.commandName}`);
+				logger.info(`SUCCESS : ${logSuffix}`);
 			} catch (error: any) {
 				handleCommandError(interaction, error);
 			}
@@ -71,14 +73,15 @@ export class CommandFactory{
 
 async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error) {
 	let message :InteractionReplyOptions;
+	const logSuffix = `User @${interaction.user.tag}\t -> ${interaction.commandName}`;
 	if (err.message === 'time') {
-		logger.debug(`TIME OUT: User @${interaction.user.tag}\t -> `, err);
+		logger.debug(`TIME OUT: ${logSuffix} `, err);
 		return;
 	} else if (err instanceof CommandError) {
-		logger.info (`FAILED  : User @${interaction.user.tag}\t -> `, err);
+		logger.info (`FAILED  : ${logSuffix} `, err);
 		message = err.getDiscordMessage()
 	} else {
-		logger.info (`ERROR   : User @${interaction.user.tag}\t -> `, err);
+		logger.info (`ERROR   : ${logSuffix} `, err);
 		message = new CommandError(err.message).getDiscordMessage();
 	}
 
