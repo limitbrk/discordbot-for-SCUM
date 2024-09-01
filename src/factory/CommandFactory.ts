@@ -41,8 +41,9 @@ export class CommandFactory{
             rest.put(
                 Routes.applicationCommands(id),
                 { body: commandsArray }
-            );
-            logger.info(`Successfully reloaded ${commandsArray.length} application (/) commands.`);
+            ).then( () => {
+				logger.info(`Successfully reloaded ${commandsArray.length} application (/) commands.`);
+			});
         } catch (error) {
             logger.error('Error reloading application (/) commands:', error);
         }
