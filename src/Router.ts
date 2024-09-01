@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { logger } from './Logger';
 
 export class Router {
-    public static init() {
+    public static init(port: number) {
         const app = express();
         app.get('/', (req: Request, res: Response) => {
             logger.info("Invocation!");
@@ -15,5 +15,7 @@ export class Router {
         app.get('/health', (req: Request, res: Response) => {
             res.send("OK");
         });
+
+        app.listen(port);
     }
 }
