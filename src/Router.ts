@@ -16,6 +16,8 @@ export class Router {
             res.send("OK");
         });
 
-        app.listen(port);
+        app.listen(port, () => {
+            logger.info(`Server running at PORT:${port}`);
+        });
     }
 }

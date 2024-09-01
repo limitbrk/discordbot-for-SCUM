@@ -11,7 +11,7 @@ const app = new ApplicationFactory(config);
 LocaleFactory.load();
 
 // init route
-Router.init(config.SERVER.PORT);
+Router.init(config.APP.PORT);
 
 // init Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
