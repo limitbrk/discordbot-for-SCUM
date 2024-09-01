@@ -5,7 +5,6 @@ import { RegisterMsg } from './message/RegisterMsg';
 import { ErrorCode } from '../../../constant/ErrorCode';
 import { SteamProfile, CommandError } from '../../../model';
 import { ApplicationFactory } from '../..';
-import { logger } from '../../../Logger';
 
 const regTime: number = config.SETTING.REGISTER.WAITTIME;
 const rulecode: string = config.SETTING.REGISTER.RULE_CODE;
@@ -13,35 +12,37 @@ const rules: Record<string, string> = {
 	th: config.SETTING.REGISTER.RULES.TH.map((id: any) => channelMention(id)).join('\n'),
 	en: config.SETTING.REGISTER.RULES.EN.map((id: any) => channelMention(id)).join('\n'),
 };
+const roles: Record<string, string[]> = {
+	th: config.SETTING.REGISTER.ASSIGN_ROLES.TH,
+	en: config.SETTING.REGISTER.ASSIGN_ROLES.EN,
+};
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('register')
-		.setDescription(t("command.help")),
+		.setDescription(t("command.help", {ns: "register"})),
 	
 	async execute(app: ApplicationFactory, interaction: CommandInteraction) {
-		try {
-			const filter = (i: any) => i.user.id === interaction.user.id;
+		const filter = (i: any) => i.user.id === interaction.user.id;
 
-			// STEP 0: Initial Reply
-			const initinteraction = await interaction.reply(RegisterMsg.init())
-				.then(i => i.awaitMessageComponent({ filter, componentType: ComponentType.Button, time: regTime }));
+		// STEP 0: Initial Reply
+		const initinteraction = await interaction.reply(RegisterMsg.init())
+			.then(i => i.awaitMessageComponent({ filter, componentType: ComponentType.Button, time: regTime }));
 
-			// STEP 1: Handle Rule Accept
-			const txnLang = initinteraction.customId;
-			await initinteraction.deferUpdate();
-			const buttonInteraction = await initinteraction.editReply(RegisterMsg.step1(txnLang, rules[txnLang]));
+		// STEP 1: Handle Rule Accept
+		const txnLang = initinteraction.customId;
+		await initinteraction.deferUpdate();
+		const buttonInteraction = await initinteraction.editReply(RegisterMsg.step1(txnLang, rules[txnLang]));
 
-			// STEP 2-3: STEAMID Validate
-			const steamProfile = await handleModalInteraction(app, interaction, buttonInteraction, txnLang);
+		// STEP 2-3: STEAMID Validate
+		const steamProfile = await handleModalInteraction(app, interaction, buttonInteraction, txnLang);
 
-			// STEP 4: Finish Registration
-			await interaction.deleteReply();
-			await interaction.channel?.send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
-			
-		} catch (err: any) {
-			await handleCommandError(interaction, err, "en");
-		}
+		// STEP 4: Finish Registration
+		interaction.guild?.members.fetch(interaction.user.id).then(member =>
+			member.roles.add(roles[txnLang])
+		)
+		await interaction.deleteReply();
+		await interaction.channel?.send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
 	},
 };
 
@@ -82,7 +83,7 @@ async function handleModalInteraction(
 					modalCollector.stop("success");
 					resolve(steamProfile);
 				} else {
-					throw new CommandError("No Custom ID Found");
+					throw new Error("Internal: CustomID not found");
 				}
 			} catch (err: any) {
 				modalCollector.stop(err.message);
@@ -91,30 +92,9 @@ async function handleModalInteraction(
 
 		modalCollector.on("end", async (collected, reason) => {
 			if (!["success"].includes(reason)) {
-				reject(new Error(reason));
+				reject(new CommandError(reason, txnLang));
 			}
 		});
 	});
 }
 
-
-async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error, lang: string) {
-
-	if (!interaction.deferred && !interaction.replied) {
-		await interaction.deferReply();
-	}
-
-	let message :InteractionReplyOptions;
-	if (err.message === 'time') {
-		logger.debug("timeout:", err);
-		return;
-	} else if (err instanceof CommandError) {
-		logger.debug("User Error:", err);
-		message = err.getDiscordMessage(lang)
-	} else {
-		logger.info("Unexpected error:", err);
-		message = new CommandError(err.message).getDiscordMessage(lang);
-	}
-
-	await interaction.editReply(message).catch(logger.error);
-}

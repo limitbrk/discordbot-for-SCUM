@@ -4,15 +4,22 @@ import { getFixedT } from "i18next";
 import { ErrorCode } from "../constant/ErrorCode";
 
 export class CommandError extends Error {
-    public getDiscordMessage(lang:string = 'en'): InteractionReplyOptions{
+    private discordMessage: InteractionReplyOptions;
+
+    constructor(message: string, lang: string = 'en'){
+        super(message)
         const _ = getFixedT(lang, "error");
-        const message = this.isCommandError() ? _(this.message+".title") : this.message
+        const title = this.isCommandError() ? _(this.message+".title") : this.message
         const desc = this.isCommandError() ? _(this.message+".desc") : _("core.errDesc")
-        return {
+        this.discordMessage = {
             content: '',
-            embeds: [EmbedBuilderUtil.error(message,desc,_("core.errFooter"))],
+            embeds: [EmbedBuilderUtil.error(title,desc,_("core.errFooter"))],
             components: [],
         }
+    }
+
+    public getDiscordMessage(): InteractionReplyOptions{
+        return this.discordMessage;
     }
 
     public isCommandError(): boolean {

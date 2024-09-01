@@ -14,7 +14,7 @@ export class SteamProfileRepositoryImpl implements SteamProfileRepository {
         .then((rs) => rs.json())
         .then((rs: any) => {
             if (rs.response.players.length<1){
-                throw new CommandError(ErrorCode.INVALID_STEAMID)
+                throw new Error(ErrorCode.INVALID_STEAMID)
             }
             return rs.response.players[0] as SteamProfile
         }).then((data)=>{

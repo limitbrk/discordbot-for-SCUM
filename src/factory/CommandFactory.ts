@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Client, Collection, Events, Interaction, REST, Routes } from 'discord.js';
+import { Client, Collection, CommandInteraction, Events, Interaction, InteractionReplyOptions, REST, Routes } from 'discord.js';
 import { ApplicationFactory } from './ApplicationFactory';
 import { logger } from '../Logger';
+import { CommandError } from '../model';
 
 export class CommandFactory{
 	private commands : Collection<string, any>;
@@ -51,23 +52,42 @@ export class CommandFactory{
 		client.on(Events.InteractionCreate, async (interaction: Interaction) => {
 			if (!interaction.isChatInputCommand()) return;
 			const command = this.commands.get(interaction.commandName);
-		
 			if (!command) {
 				logger.error(`No command ${interaction.commandName}.`);
 				return;
 			}
-		
 			try {
-				logger.info(`"@${interaction.user.tag}" executed: ${interaction.commandName}`)
+				logger.info(`ENTERING: User @${interaction.user.tag}\t -> ${interaction.commandName}`);
 				await command.execute(this.app, interaction);
-			} catch (error) {
-				logger.error(error);
-				if (interaction.replied || interaction.deferred) {
-					await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
-				} else {
-					await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-				}
+				logger.info(`SUCCESS : User @${interaction.user.tag}\t -> ${interaction.commandName}`);
+			} catch (error: any) {
+				handleCommandError(interaction, error);
 			}
 		});
 	}
+}
+
+
+async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error) {
+
+	if (!interaction.deferred && !interaction.replied) {
+		await interaction.deferReply();
+	}
+
+	let message :InteractionReplyOptions;
+	if (err.message === 'time') {
+		logger.debug(`TIME OUT: User @${interaction.user.tag}\t -> `, err);
+		return;
+	} else if (err instanceof CommandError) {
+		logger.info (`FAILED  : User @${interaction.user.tag}\t -> `, err);
+		message = err.getDiscordMessage()
+	} else {
+		logger.info (`ERROR   : User @${interaction.user.tag}\t -> `, err);
+		message = new CommandError(err.message).getDiscordMessage();
+	}
+
+	if (!interaction.deferred && !interaction.replied) {
+		await interaction.deferReply();
+	}
+	await interaction.editReply(message);
 }
