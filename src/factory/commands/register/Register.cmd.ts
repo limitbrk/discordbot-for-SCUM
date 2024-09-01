@@ -41,8 +41,8 @@ module.exports = {
 		interaction.guild?.members.fetch(interaction.user.id).then(member =>
 			member.roles.add(roles[txnLang])
 		)
-		await interaction.deleteReply();
 		await interaction.channel?.send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
+		await interaction.deleteReply();
 	},
 };
 

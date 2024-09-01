@@ -70,11 +70,6 @@ export class CommandFactory{
 
 
 async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error) {
-
-	if (!interaction.deferred && !interaction.replied) {
-		await interaction.deferReply();
-	}
-
 	let message :InteractionReplyOptions;
 	if (err.message === 'time') {
 		logger.debug(`TIME OUT: User @${interaction.user.tag}\t -> `, err);
