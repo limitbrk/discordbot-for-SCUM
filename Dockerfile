@@ -9,6 +9,7 @@ RUN npm run build
 
 #Production stage
 FROM node:20-alpine AS production
+ENV TZ="Asia/Bangkok"
 WORKDIR /app
 COPY --from=build /app/package*.json .
 RUN npm ci --omit=dev
