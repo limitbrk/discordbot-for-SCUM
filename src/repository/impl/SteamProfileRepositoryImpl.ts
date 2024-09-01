@@ -1,12 +1,13 @@
 import { ErrorCode } from "../../constant/ErrorCode"
 import { SteamProfile, CommandError } from "../../model"
+import { SteamProfileRepository } from "../SteamProfileRepository"
 
-export class SteamProfileRepositoryImpl {
+export class SteamProfileRepositoryImpl implements SteamProfileRepository {
     constructor(
         private token: string
     ){}
 
-    public getPlayerByID64(id :string): Promise<SteamProfile>{
+    public getByID64(id :string): Promise<SteamProfile>{
         return fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${this.token}&steamids=${id}`,{
             method: 'GET',
         })

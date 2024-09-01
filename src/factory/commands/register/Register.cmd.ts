@@ -1,10 +1,11 @@
-import { ButtonInteraction, channelMention, CommandInteraction, ComponentType, InteractionReplyOptions, Message, SlashCommandBuilder } from 'discord.js';
+import { channelMention, CommandInteraction, ComponentType, InteractionReplyOptions, Message, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../Config';
 import { RegisterMsg } from './message/RegisterMsg';
 import { ErrorCode } from '../../../constant/ErrorCode';
 import { SteamProfile, CommandError } from '../../../model';
 import { ApplicationFactory } from '../..';
+import { logger } from '../../../Logger';
 
 const regTime: number = config.SETTING.REGISTER.WAITTIME;
 const rulecode: string = config.SETTING.REGISTER.RULE_CODE;
@@ -73,7 +74,7 @@ async function handleModalInteraction(
 							throw new CommandError(ErrorCode.INVALID_RULECODE);
 						}
 
-						steamProfile = await app.steamProfileRepo.getPlayerByID64(id);
+						steamProfile = await app.steamProfileRepo.getByID64(id);
 						initedAwaitModal = false;
 						await modalSubmit.editReply(RegisterMsg.step3(txnLang, steamProfile));
 					}
@@ -83,14 +84,13 @@ async function handleModalInteraction(
 				} else {
 					throw new CommandError("No Custom ID Found");
 				}
-			} catch (err) {
-				modalCollector.stop("modal_error");
-				reject(err);
+			} catch (err: any) {
+				modalCollector.stop(err.message);
 			}
 		});
 
 		modalCollector.on("end", async (collected, reason) => {
-			if (!["time", "success", "modal_error"].includes(reason)) {
+			if (!["success"].includes(reason)) {
 				reject(new Error(reason));
 			}
 		});
@@ -105,12 +105,16 @@ async function handleCommandError(interaction: CommandInteraction, err: CommandE
 	}
 
 	let message :InteractionReplyOptions;
-	if (err instanceof CommandError) {
+	if (err.message === 'time') {
+		logger.debug("timeout:", err);
+		return;
+	} else if (err instanceof CommandError) {
+		logger.debug("User Error:", err);
 		message = err.getDiscordMessage(lang)
 	} else {
-		console.log("Unexpected error:", err);
+		logger.info("Unexpected error:", err);
 		message = new CommandError(err.message).getDiscordMessage(lang);
 	}
 
-	await interaction.editReply(message).catch(console.error);
+	await interaction.editReply(message).catch(logger.error);
 }

@@ -11,7 +11,8 @@ const config = {
     },
     DISCORD: {
         NAME: "Happy Bot",
-        TOKEN: "example-discord-token"
+        TOKEN: "example-discord-token",
+        CLIENT_ID: "example-discord-client-id"
     },
     REPO: {
         STEAM: {
@@ -39,5 +40,4 @@ const config = {
 }
 
 const mergedConfig = ConfigUtils.mergeEnvWithConfig(config, process.env);
-console.log(mergedConfig)
 export default mergedConfig;

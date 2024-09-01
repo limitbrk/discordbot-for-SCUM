@@ -1,3 +1,4 @@
+import { logger } from "../Logger";
 import { StringUtils } from "./StringUtils";
 
 
@@ -24,7 +25,7 @@ export class ConfigUtils {
                                 mergedConfig[key] = newArr;
                             }
                         } catch (e) {
-                            console.error(`Can\'t parse value of ${envKey} :`, e)
+                            logger.error(`Can\'t parse value of ${envKey} :`, e)
                         }
                     } else if (config[key] !== null) {
                         mergedConfig[key] = this.mergeEnvWithConfig(config[key], env, envKey);
@@ -40,7 +41,7 @@ export class ConfigUtils {
                     mergedConfig[key] = envVal || config[key];
                     break;
                 default:
-                    console.warn('Detect new Typeof ' + envKey)
+                    logger.warn('Detect new Typeof ' + envKey)
                     break;
             }
         }
