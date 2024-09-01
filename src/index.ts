@@ -1,5 +1,5 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import config from "./Config";
+import config from "./config";
 import { ApplicationFactory, CommandFactory, LocaleFactory } from "./factory";
 import { logger } from "./Logger";
 

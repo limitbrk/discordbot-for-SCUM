@@ -1,6 +1,6 @@
 import { ActionRowBuilder, BaseMessageOptions, ButtonBuilder, ButtonStyle, channelMention, InteractionReplyOptions, ModalComponentData, TextInputBuilder, TextInputStyle, User, userMention } from "discord.js";
 import { getFixedT } from "i18next";
-import config from "../../../../Config";
+import config from "../../../../config";
 import { SteamProfile } from "../../../../model";
 import { EmbedBuilderUtil, StringUtils } from "../../../../utils";
 

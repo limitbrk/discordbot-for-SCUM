@@ -1,6 +1,6 @@
 import { channelMention, CommandInteraction, ComponentType, InteractionReplyOptions, Message, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
-import config from '../../../Config';
+import config from '../../../config';
 import { RegisterMsg } from './message/RegisterMsg';
 import { ErrorCode } from '../../../constant/ErrorCode';
 import { SteamProfile, CommandError } from '../../../model';
