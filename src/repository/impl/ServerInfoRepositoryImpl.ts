@@ -1,8 +1,7 @@
-import { ActivityType, PresenceData, PresenceStatusData } from "discord.js";
+import { ActivityType, PresenceData } from "discord.js";
 import { ErrorCode } from "../../constant/ErrorCode";
 import { ServerInfo } from "../../model";
 import { ServerInfoRepository } from "../ServerInfoRepository";
-import { logger } from "../../Logger";
 
 export class ServerInfoRepositoryImpl implements ServerInfoRepository {
     constructor(

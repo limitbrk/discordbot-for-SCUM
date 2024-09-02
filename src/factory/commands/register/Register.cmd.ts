@@ -1,4 +1,4 @@
-import { channelMention, CommandInteraction, ComponentType, InteractionReplyOptions, Message, SlashCommandBuilder } from 'discord.js';
+import { channelMention, CommandInteraction, ComponentType, Message, SlashCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../config';
 import { RegisterMsg } from './message/RegisterMsg';

@@ -1,5 +1,5 @@
 import { ErrorCode } from "../../constant/ErrorCode"
-import { SteamProfile, CommandError } from "../../model"
+import { SteamProfile } from "../../model"
 import { SteamProfileRepository } from "../SteamProfileRepository"
 
 export class SteamProfileRepositoryImpl implements SteamProfileRepository {
