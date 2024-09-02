@@ -58,7 +58,6 @@ export class CommandFactory{
 				return;
 			}
 			try {
-				
 				const logSuffix = `User @${interaction.user.tag}\t -> ${interaction.commandName}`;
 				logger.info(`ENTERING: ${logSuffix}`);
 				await command.execute(this.app, interaction);
@@ -78,10 +77,10 @@ async function handleCommandError(interaction: CommandInteraction, err: CommandE
 		logger.debug(`TIME OUT: ${logSuffix} `, err);
 		return;
 	} else if (err instanceof CommandError) {
-		logger.info (`FAILED  : ${logSuffix} `, err);
+		logger.warn (`FAILED  : ${logSuffix} `, err);
 		message = err.getDiscordMessage()
 	} else {
-		logger.info (`ERROR   : ${logSuffix} `, err);
+		logger.error (`ERROR   : ${logSuffix} `, err);
 		message = new CommandError(err.message).getDiscordMessage();
 	}
 

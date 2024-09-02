@@ -2,6 +2,7 @@ import { ActivityType, PresenceData, PresenceStatusData } from "discord.js";
 import { ErrorCode } from "../../constant/ErrorCode";
 import { ServerInfo } from "../../model";
 import { ServerInfoRepository } from "../ServerInfoRepository";
+import { logger } from "../../Logger";
 
 export class ServerInfoRepositoryImpl implements ServerInfoRepository {
     constructor(
@@ -16,12 +17,16 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
             method: 'GET',
         })
         .then((rs) => {
-            if (rs.status === 200) {
-                return rs
+            switch (rs.status) {
+                case 200 :
+                    return rs.json()
+                case 404 :
+                    throw new Error(ErrorCode.INVALID_SERVERID);
+                default :
+                    throw new Error("Cannot get server info: " + rs)
             }
-            throw new Error(ErrorCode.INVALID_SERVERID);
+            
         })
-        .then((rs) => rs.json())
         .then((rs: any) => rs.data.attributes as ServerInfo);
     }
 

@@ -19,13 +19,18 @@ client.once(Events.ClientReady, (readyClient: Client<true>) => {
 	logger.info(`Ready! Logged in as "${readyClient.user.tag}"`);
 
 	// Function to set rich presence
-    function updateRichPresence() {
+    function updateRichPresence(isinit?: boolean) {
 		app.serverInfoRepo.getDiscordPresence().then(ps =>{
 			readyClient.user.setPresence(ps);
 			logger.info('updated: ' + ps.activities?.[0].name);
+		}).catch( (e :Error) => {
+			if (isinit) {
+				throw e 
+			}
+			logger.error(e);
 		})
     }
-    updateRichPresence();
+    updateRichPresence(true);
     setInterval(updateRichPresence, 60000);
 });
 const commands = new CommandFactory(app, config);
