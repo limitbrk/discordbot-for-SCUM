@@ -28,7 +28,7 @@ export class EmbedBuilderUtil {
             .setTitle(title)
             .setDescription(desc || null)
             .setColor(Color.PINK)
-            .setThumbnail(user.avatarURL())
+            .setThumbnail(user.displayAvatarURL())
             .addFields(
                 { name: "Discord", value: userMention(user.id)},
                 { name: "Steam Profile", value: `[${steamInfo.personaname}](${steamInfo.profileUrl})`},
