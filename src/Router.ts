@@ -5,7 +5,7 @@ export class Router {
     public static init(port: number) {
         const app = express();
         app.get('/', (req: Request, res: Response) => {
-            logger.info("Invocation!");
+            logger.debug("Invocation!");
             const greeting = `
                 Hello, this is a bot for a 1:1 server only<BR>
             `;

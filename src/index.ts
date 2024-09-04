@@ -22,7 +22,7 @@ client.once(Events.ClientReady, (readyClient: Client<true>) => {
     function updateRichPresence(isinit?: boolean) {
 		app.serverInfoRepo.getDiscordPresence().then(ps =>{
 			readyClient.user.setPresence(ps);
-			logger.info('updated: ' + ps.activities?.[0].name);
+			logger.debug('updated: ' + ps.activities?.[0].name);
 		}).catch( (e :Error) => {
 			if (isinit) {
 				throw e 
