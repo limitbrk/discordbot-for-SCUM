@@ -18,11 +18,12 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
         .then((rs) => {
             switch (rs.status) {
                 case 200 :
-                    return rs.json()
+                    return rs.json();
                 case 404 :
                     throw new Error(ErrorCode.INVALID_SERVERID);
                 default :
-                    throw new Error("Cannot get server info: " + rs.text())
+                    const err = "Cannot get server info: " + rs.text();
+                    throw new Error(err)
             }
             
         })
