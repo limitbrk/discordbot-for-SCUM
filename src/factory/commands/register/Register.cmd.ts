@@ -66,18 +66,22 @@ async function handleModalInteraction(
 					if (!initedAwaitModal) {
 						initedAwaitModal = true;
 						const modalSubmit = await i.awaitModalSubmit({ filter, time: regTime });
-						await modalSubmit.deferUpdate();
+						try{
+							const id = modalSubmit.fields.getTextInputValue("step2.question1");
+							const rc = modalSubmit.fields.getTextInputValue("step2.question2");
 
-						const id = modalSubmit.fields.getTextInputValue("step2.question1");
-						const rc = modalSubmit.fields.getTextInputValue("step2.question2");
-
-						if (rc !== rulecode) {
-							throw new CommandError(ErrorCode.INVALID_RULECODE);
+							if (rc !== rulecode) {
+								throw new CommandError(ErrorCode.INVALID_RULECODE);
+							}
+							steamProfile = await app.steamProfileRepo.getByID64(id);
+							initedAwaitModal = false;
+							await modalSubmit.deferUpdate();
+							await modalSubmit.editReply(RegisterMsg.step3(txnLang, steamProfile));
+						} catch (e) {
+							await modalSubmit.deferUpdate();
+							throw e;
 						}
-
-						steamProfile = await app.steamProfileRepo.getByID64(id);
-						initedAwaitModal = false;
-						await modalSubmit.editReply(RegisterMsg.step3(txnLang, steamProfile));
+						
 					}
 				} else if (i.customId === "step3.btn.next") {
 					modalCollector.stop("success");

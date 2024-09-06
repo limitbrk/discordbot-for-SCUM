@@ -22,7 +22,7 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
                 case 404 :
                     throw new Error(ErrorCode.INVALID_SERVERID);
                 default :
-                    throw new Error("Cannot get server info: " + rs)
+                    throw new Error("Cannot get server info: " + rs.text())
             }
             
         })
