@@ -15,15 +15,15 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
         return fetch(`https://api.battlemetrics.com/servers/${this.id}`,{
             method: 'GET',
         })
-        .then((rs) => {
+        .then(async (rs) => {
             switch (rs.status) {
                 case 200 :
                     return rs.json();
                 case 404 :
                     throw new Error(ErrorCode.INVALID_SERVERID);
                 default :
-                    const err = "Cannot get server info: " + rs.text();
-                    throw new Error(err)
+                    const err = await rs.text();
+                    throw new Error("Cannot get server info: " + err)
             }
             
         })
