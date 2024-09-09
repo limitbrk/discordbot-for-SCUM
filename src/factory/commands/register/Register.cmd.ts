@@ -1,4 +1,4 @@
-import { channelMention, CommandInteraction, ComponentType, Message, SlashCommandBuilder } from 'discord.js';
+import { channelMention, CommandInteraction, ComponentType, Message, SlashCommandBuilder, TextChannel } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../config';
 import { RegisterMsg } from './message/RegisterMsg';
@@ -41,7 +41,8 @@ module.exports = {
 		interaction.guild?.members.fetch(interaction.user.id).then(member =>
 			member.roles.add(roles[txnLang])
 		)
-		await interaction.channel?.send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
+		// Text Should be textBased
+		await (interaction.channel as TextChannel).send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
 		await interaction.deleteReply();
 	},
 };
