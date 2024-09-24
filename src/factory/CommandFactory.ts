@@ -73,7 +73,7 @@ export class CommandFactory{
 async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error) {
 	let message :InteractionReplyOptions;
 	const logSuffix = `User @${interaction.user.tag}\t -> ${interaction.commandName}`;
-	if (err.message === 'time') {
+	if (err.message.includes("time")) {
 		logger.debug(`TIME OUT: ${logSuffix} `, err);
 		return;
 	} else if (err instanceof CommandError) {
