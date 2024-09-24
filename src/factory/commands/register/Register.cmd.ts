@@ -96,7 +96,7 @@ async function handleModalInteraction(
 		});
 
 		modalCollector.on("end", async (collected, reason) => {
-			if (!["success"].includes(reason)) {
+			if (!["time","success"].includes(reason)) {
 				reject(new CommandError(reason, txnLang));
 			}
 		});
