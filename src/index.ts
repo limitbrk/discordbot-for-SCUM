@@ -10,7 +10,7 @@ const app = new ApplicationFactory(config);
 // init Locale
 LocaleFactory.load();
 
-// init route
+// init Route
 Router.init(config.APP.PORT);
 
 // init Discord
@@ -22,7 +22,11 @@ client.once(Events.ClientReady, (readyClient: Client<true>) => {
     function updateRichPresence(isinit?: boolean) {
 		app.serverInfoRepo.getDiscordPresence().then(ps =>{
 			readyClient.user.setPresence(ps);
-			logger.debug('updated: ' + ps.activities?.[0].name);
+			const status = ps.activities?.[0].name
+			logger.debug('updated: ' + status);
+			if (status?.slice(-3,-2) !== undefined){
+				app.timeTrackJob.checkTime(client, status?.slice(-3,-2))
+			}
 		}).catch( (e :Error) => {
 			if (isinit) {
 				throw e 

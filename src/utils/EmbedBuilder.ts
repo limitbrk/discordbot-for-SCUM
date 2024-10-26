@@ -1,4 +1,4 @@
-import { EmbedBuilder, User, userMention } from 'discord.js';
+import { EmbedBuilder, time, TimestampStyles, User, userMention } from 'discord.js';
 import { Color } from '../constant/Color';
 import { SteamProfile } from '../model';
 
@@ -43,5 +43,13 @@ export class EmbedBuilderUtil {
             .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Error.svg/1200px-Error.svg.png")
             .setFooter({ text: footer })
             .setColor(Color.RED);
+    }
+
+    static trackalert(deadline: Date): EmbedBuilder {
+        return new EmbedBuilder()
+            .setTitle("Get ready?")
+            .setDescription(`# Hey!!! \nกำลังจะเที่ยงคืนภายใน \nMidnight will begin less than ${time(deadline, TimestampStyles.RelativeTime)}`)
+            .setThumbnail("https://static.wikia.nocookie.net/scum_gamepedia_en/images/a/af/Cursed_Puppet_Suit.png/revision/latest?cb=20230210112231")
+            .setColor(Color.PINK);
     }
 }
