@@ -2,7 +2,7 @@ import { ServerInfoRepositoryImpl } from "../repository/impl/ServerInfoRepositor
 import { SteamProfileRepositoryImpl } from "../repository/impl/SteamProfileRepositoryImpl";
 import { ServerInfoRepository } from "../repository/ServerInfoRepository";
 import { SteamProfileRepository } from "../repository/SteamProfileRepository";
-import { TimeAlert } from "./job/TimeAlert";
+import { TimeAlert } from "./job/TimedAlert";
 
 export class ApplicationFactory{
     public timeTrackJob : TimeAlert
