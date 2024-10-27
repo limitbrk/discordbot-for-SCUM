@@ -16,7 +16,7 @@ export class TimeAlert {
         if(hour === "23"){ // alert before 24
             this.alert(client)
         }
-        if(hour === "0"){ // alert before 24
+        if(hour === "24"){ // delete job when 24
             this.deleteBotMessage(client)
         }
     }
@@ -37,6 +37,6 @@ export class TimeAlert {
     private async deleteBotMessage(client: Client<boolean>){
         if (StringUtils.isEmpty(this.last_alert_msg)) return
         ( client.channels.cache.get(this.channel) as TextChannel ).messages.delete(this.last_alert_msg)
-            .then(() => logger.info("Deleted alerted!"))
+            .then(() => logger.info("Alert deleted!"))
     }
 }
