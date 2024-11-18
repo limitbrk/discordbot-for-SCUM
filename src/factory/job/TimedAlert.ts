@@ -17,6 +17,7 @@ export class TimeAlert {
             this.alert(client)
         }
         if(hour === "24"){ // delete job when 24
+            // TODO: Delete Message not work
             this.deleteBotMessage(client)
         }
     }
