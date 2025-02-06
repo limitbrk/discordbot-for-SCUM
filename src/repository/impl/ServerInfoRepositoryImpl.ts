@@ -23,7 +23,7 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
                     throw new Error(ErrorCode.INVALID_SERVERID);
                 default :
                     const err = await rs.text();
-                    throw new Error("Cannot get server info: " + err)
+                    throw new Error("Cannot get server info: " + rs.status)
             }
             
         })
