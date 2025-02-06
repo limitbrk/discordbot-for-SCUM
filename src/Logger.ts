@@ -1,7 +1,7 @@
 import { format, transports, createLogger } from "winston";
 
 export const logger = createLogger({
-    level: "info",
+    level: "debug",
     format: format.combine(
         format.colorize({message: true}),
         format.errors({stack: true}),
