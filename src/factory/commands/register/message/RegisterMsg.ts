@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseMessageOptions, ButtonBuilder, ButtonStyle, channelMention, InteractionReplyOptions, ModalComponentData, TextInputBuilder, TextInputStyle, User, userMention } from "discord.js";
+import { ActionRowBuilder, BaseMessageOptions, ButtonBuilder, ButtonStyle, channelMention, InteractionEditReplyOptions, InteractionReplyOptions, MessageFlags, MessageFlagsBitField, ModalComponentData, TextInputBuilder, TextInputStyle, User, userMention } from "discord.js";
 import { getFixedT } from "i18next";
 import config from "../../../../config";
 import { SteamProfile } from "../../../../model";
@@ -25,10 +25,10 @@ export class RegisterMsg {
                     .setEmoji(_('command.btn.en.emoji'))
                     .setStyle(ButtonStyle.Primary),
             )],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         }
     }
-    public static step1(lang: string, rule: string): InteractionReplyOptions {
+    public static step1(lang: string, rule: string): InteractionEditReplyOptions {
         const _ = getFixedT(lang, this.namespace);
         return {
             embeds: [EmbedBuilderUtil.info(
@@ -47,7 +47,6 @@ export class RegisterMsg {
                     .setEmoji(_('step1.btn.next.emoji'))
                     .setStyle(ButtonStyle.Success),
             )],
-            ephemeral: true,
         }
     }
     public static step2(lang: string, ): ModalComponentData {
@@ -75,7 +74,7 @@ export class RegisterMsg {
             ],
         }
     }
-    public static step3(lang: string, steam: SteamProfile): InteractionReplyOptions {
+    public static step3(lang: string, steam: SteamProfile): InteractionEditReplyOptions {
         const _ = getFixedT(lang, this.namespace);
         return {
             embeds: [EmbedBuilderUtil.steamInfo(
@@ -95,7 +94,6 @@ export class RegisterMsg {
                     .setEmoji(_('step3.btn.next.emoji'))
                     .setStyle(ButtonStyle.Success),
             )],
-            ephemeral: true,
         }
     }
     public static finish(lang: string, user: User, steam: SteamProfile): BaseMessageOptions {

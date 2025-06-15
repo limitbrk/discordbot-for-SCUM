@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { Client, Collection, CommandInteraction, Events, Interaction, InteractionReplyOptions, REST, Routes } from 'discord.js';
+import { Client, Collection, CommandInteraction, Events, Interaction, InteractionEditReplyOptions, MessagePayload, MessageTarget, REST, Routes } from 'discord.js';
 import { ApplicationFactory } from './ApplicationFactory';
 import { logger } from '../Logger';
 import { CommandError } from '../model';
@@ -71,21 +71,22 @@ export class CommandFactory{
 
 
 async function handleCommandError(interaction: CommandInteraction, err: CommandError | Error) {
-	let message :InteractionReplyOptions;
+	let msg: MessagePayload;
+	const ch: MessageTarget = interaction.channel!;
 	const logSuffix = `User @${interaction.user.tag}\t -> ${interaction.commandName}`;
 	if (err.message.includes("time")) {
 		logger.debug(`TIME OUT: ${logSuffix} `, err);
 		return;
 	} else if (err instanceof CommandError) {
 		logger.warn (`FAILED  : ${logSuffix} `, err);
-		message = err.getDiscordMessage()
+		msg = MessagePayload.create(ch, err.getDiscordMessage())
 	} else {
-		logger.error (`ERROR   : ${logSuffix} `, err);
-		message = new CommandError(err.message).getDiscordMessage();
+		logger.error(`ERROR   : ${logSuffix} `, err);
+		msg = MessagePayload.create(ch, new CommandError(err.message).getDiscordMessage());
 	}
 
 	if (!interaction.deferred && !interaction.replied) {
 		await interaction.deferReply();
 	}
-	await interaction.editReply(message);
+	await interaction.editReply(msg);
 }

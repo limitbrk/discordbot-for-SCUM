@@ -1,10 +1,10 @@
-import { InteractionReplyOptions } from "discord.js";
+import { InteractionReplyOptions, Message, MessagePayload, MessagePayloadOption } from "discord.js";
 import { EmbedBuilderUtil } from "../utils";
 import { getFixedT } from "i18next";
 import { ErrorCode } from "../constant/ErrorCode";
 
 export class CommandError extends Error {
-    private discordMessage: InteractionReplyOptions;
+    private discordMessage: MessagePayloadOption;
 
     constructor(message: string, lang: string = 'en'){
         super(message)
@@ -15,10 +15,10 @@ export class CommandError extends Error {
             content: '',
             embeds: [EmbedBuilderUtil.error(title,desc,_("core.errFooter"))],
             components: [],
-        }
+        };
     }
 
-    public getDiscordMessage(): InteractionReplyOptions{
+    public getDiscordMessage(): MessagePayloadOption{
         return this.discordMessage;
     }
 

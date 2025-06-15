@@ -1,7 +1,7 @@
 {
   "name": "discordbot-for-scum",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.1.0",
+  "main": "./src/index.ts",
   "scripts": {
     "dev": "ts-node ./src/index",
     "build": "tsc",
@@ -13,7 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "discord.js": "^14.16.1",
+    "discord.js": "^14.19.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "i18next": "^23.14.0",
