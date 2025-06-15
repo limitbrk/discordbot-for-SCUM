@@ -74,9 +74,14 @@ async function handleModalInteraction(
 							await modalSubmit.deferUpdate();
 							throw new CommandError(ErrorCode.INVALID_RULECODE);
 						}
-						steamProfile = await app.steamProfileRepo.getByID64(id);
-						initedAwaitModal = false;
 						
+						steamProfile = await app.steamProfileRepo.getByID64(id);
+						if (!steamProfile || !steamProfile.steamid) {
+							await modalSubmit.deferUpdate();
+							throw new CommandError(ErrorCode.INVALID_STEAMID);
+						}
+						
+						initedAwaitModal = false;
 						await modalSubmit.deferUpdate();
 						await modalSubmit.editReply(RegisterMsg.step3(txnLang, steamProfile));
 					}

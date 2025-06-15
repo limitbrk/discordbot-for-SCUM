@@ -1,4 +1,3 @@
-import { ErrorCode } from "../../constant/ErrorCode"
 import { SteamProfile } from "../../model"
 import { SteamProfileRepository } from "../SteamProfileRepository"
 
@@ -14,10 +13,9 @@ export class SteamProfileRepositoryImpl implements SteamProfileRepository {
         .then((rs) => rs.json())
         .then((rs: any) => {
             if (rs.response.players.length<1){
-                throw new Error(ErrorCode.INVALID_STEAMID)
+                return {} as SteamProfile;
             }
-            return rs.response.players[0] as SteamProfile
-        }).then((data)=>{
+            const data = rs.response.players[0] as SteamProfile
             data.profileUrl = `https://steamcommunity.com/profiles/${id}`
             return data
         })
