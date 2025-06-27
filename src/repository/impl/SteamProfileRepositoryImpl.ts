@@ -6,14 +6,14 @@ export class SteamProfileRepositoryImpl implements SteamProfileRepository {
         private token: string
     ){}
 
-    public getByID64(id :string): Promise<SteamProfile>{
+    public getByID64(id :string): Promise<SteamProfile|undefined> {
         return fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${this.token}&steamids=${id}`,{
             method: 'GET',
         })
         .then((rs) => rs.json())
         .then((rs: any) => {
             if (rs.response.players.length<1){
-                return {} as SteamProfile;
+                return undefined;
             }
             const data = rs.response.players[0] as SteamProfile
             data.profileUrl = `https://steamcommunity.com/profiles/${id}`

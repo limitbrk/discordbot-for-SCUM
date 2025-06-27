@@ -1,10 +1,11 @@
-import { channelMention, CommandInteraction, ComponentType, Message, SlashCommandBuilder, TextChannel } from 'discord.js';
+import { ButtonInteraction, channelMention, CommandInteraction, ComponentType, SlashCommandBuilder, TextChannel } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../config';
 import { RegisterMsg } from './message/RegisterMsg';
 import { ErrorCode } from '../../../constant/ErrorCode';
 import { SteamProfile, CommandError } from '../../../model';
 import { ApplicationFactory } from '../..';
+import { DiscordUtils } from '../../../utils';
 
 const regTime: number = config.SETTING.REGISTER.WAITTIME;
 const rulecode: string = config.SETTING.REGISTER.RULE_CODE;
@@ -23,84 +24,131 @@ module.exports = {
 		.setDescription(t("command.help", {ns: "register"})),
 	
 	async execute(app: ApplicationFactory, interaction: CommandInteraction) {
-		const filter = (i: any) => i.user.id === interaction.user.id;
-
-		// STEP 0: Initial Reply
-		const initinteraction = await interaction.reply(RegisterMsg.init())
-			.then(i => i.awaitMessageComponent({ filter, componentType: ComponentType.Button, time: regTime }));
-
-		// STEP 1: Handle Rule Accept
-		const txnLang = initinteraction.customId;
-		await initinteraction.deferUpdate();
-		const buttonInteraction = await initinteraction.editReply(RegisterMsg.step1(txnLang, rules[txnLang]));
-
-		// STEP 2-3: STEAMID Validate
-		const steamProfile = await handleModalInteraction(app, interaction, buttonInteraction, txnLang);
-
-		// STEP 4: Finish Registration
-		interaction.guild?.members.fetch(interaction.user.id).then(member =>
-			member.roles.add(roles[txnLang])
-		)
-		// Text Should be textBased
-		await (interaction.channel as TextChannel).send(RegisterMsg.finish(txnLang, interaction.user, steamProfile));
-		await interaction.deleteReply();
-	},
+		try {
+		const lang = await step0_initial(interaction);
+		await step1_rules(interaction, lang);
+		const steamProfile = await step2_modal(app, interaction, lang);
+		await step3_confirm(interaction, lang, steamProfile);
+		await step4_complete(app, interaction, lang, steamProfile);
+		} catch (err) {
+		throw err instanceof Error ? err : new CommandError('Unexpected error');
+		}
+	}
 };
 
-async function handleModalInteraction(
-	app: ApplicationFactory,
-	interaction: CommandInteraction,
-	buttonInteraction: Message<boolean>,
-	txnLang: string
+async function step0_initial(interaction: CommandInteraction): Promise<'th' | 'en'> {
+  try {
+    const reply = await interaction.reply(RegisterMsg.init());
+    const button = await reply.awaitMessageComponent({
+      filter: i => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: regTime,
+    }) as ButtonInteraction;
+
+    const lang = button.customId as 'th' | 'en';
+    await DiscordUtils.safeDefer(button);
+    return lang;
+  } catch (err) {
+    throw new CommandError('Timeout or interaction error during language select');
+  }
+}
+
+async function step1_rules(interaction: CommandInteraction, lang: 'th' | 'en') {
+  const message = RegisterMsg.step1(lang, rules[lang]);
+  try {
+    await interaction.editReply(message);
+  } catch (err) {
+    throw new CommandError('Failed to show rules');
+  }
+}
+
+async function step2_modal(
+  app: ApplicationFactory,
+  interaction: CommandInteraction,
+  lang: 'th' | 'en',
 ): Promise<SteamProfile> {
-	return new Promise<SteamProfile>((resolve, reject) => {
-		const filter = (i: any) => i.user.id === interaction.user.id;
-		let steamProfile: SteamProfile;
-		let initedAwaitModal = false;
+  return new Promise(async (resolve, reject) => {
+    let steamProfile: SteamProfile | undefined;
+    let modalActive = false;
 
-		const modalCollector = buttonInteraction.createMessageComponentCollector({ filter, componentType: ComponentType.Button, time: regTime });
+    const message = await interaction.fetchReply()
+    const collector = message?.createMessageComponentCollector({
+      filter: i => i.user.id === interaction.user.id,
+      componentType: ComponentType.Button,
+      time: regTime,
+    });
 
-		modalCollector.on("collect", async i => {
-			try {
-				if (['step1.btn.next', 'step3.btn.back'].includes(i.customId)) {
-					await i.showModal(RegisterMsg.step2(txnLang));
-					if (!initedAwaitModal) {
-						initedAwaitModal = true;
-						const modalSubmit = await i.awaitModalSubmit({ filter, time: regTime });
-						const id = modalSubmit.fields.getTextInputValue("step2.question1");
-						const rc = modalSubmit.fields.getTextInputValue("step2.question2");
+    collector.on('collect', async i => {
+      try {
+        if (['step1.btn.next', 'step3.btn.back'].includes(i.customId)) {
+          await i.showModal(RegisterMsg.step2(lang));
 
-						if (rc !== rulecode) {
-							await modalSubmit.deferUpdate();
-							throw new CommandError(ErrorCode.INVALID_RULECODE);
-						}
-						
-						steamProfile = await app.steamProfileRepo.getByID64(id);
-						if (!steamProfile || !steamProfile.steamid) {
-							await modalSubmit.deferUpdate();
-							throw new CommandError(ErrorCode.INVALID_STEAMID);
-						}
-						
-						initedAwaitModal = false;
-						await modalSubmit.deferUpdate();
-						await modalSubmit.editReply(RegisterMsg.step3(txnLang, steamProfile));
-					}
-				} else if (i.customId === "step3.btn.next") {
-					modalCollector.stop("success");
-					resolve(steamProfile);
-				} else {
-					throw new Error("Internal: CustomID not found");
-				}
-			} catch (err: any) {
-				modalCollector.stop(err.message);
+          if (!modalActive) {
+            modalActive = true;
+
+            const modal = await i.awaitModalSubmit({
+              filter: m => m.user.id === interaction.user.id,
+              time: regTime,
+            });
+
+            const id = modal.fields.getTextInputValue('step2.question1');
+            const rc = modal.fields.getTextInputValue('step2.question2');
+            if (rc !== rulecode) {
+              await DiscordUtils.safeDefer(modal);
+              return reject(new CommandError(ErrorCode.INVALID_RULECODE, lang));
+            }
+
+			steamProfile = await app.steamProfileRepo.getByID64(id);
+			if (!steamProfile) {
+			  await DiscordUtils.safeDefer(modal);
+			  return reject(new CommandError(ErrorCode.INVALID_STEAMID, lang));
 			}
-		});
+            await DiscordUtils.safeDefer(modal);
+            await modal.editReply(RegisterMsg.step3(lang, steamProfile));
+          }
+        } else if (i.customId === 'step3.btn.next') {
+          collector.stop('success');
+          resolve(steamProfile!);
+        } else {
+          throw new Error('Invalid Discord Custom ID');
+        }
+      } catch (e: any) {
+        collector.stop(e.message);
+        reject(new CommandError(e.message, lang));
+      }
+    });
 
-		modalCollector.on("end", async (collected, reason) => {
-			if (!["time","success"].includes(reason)) {
-				reject(new CommandError(reason, txnLang));
-			}
-		});
-	});
+    collector.on('end', (_, reason) => {
+      if (!['success', 'time'].includes(reason)) {
+        reject(new CommandError(reason, lang));
+      }
+    });
+  });
+}
+
+async function step3_confirm(interaction: CommandInteraction, lang: 'th' | 'en', steam: SteamProfile) {
+  try {
+    await interaction.editReply(RegisterMsg.step3(lang, steam));
+  } catch (err) {
+    throw new CommandError('Could not confirm profile');
+  }
+}
+
+async function step4_complete(
+  app: ApplicationFactory,
+  interaction: CommandInteraction,
+  lang: 'th' | 'en',
+  steam: SteamProfile,
+) {
+  try {
+    const member = await interaction.guild?.members.fetch(interaction.user.id);
+    await member?.roles.add(roles[lang]);
+
+    const finishMsg = RegisterMsg.finish(lang, interaction.user, steam);
+    await (interaction.channel as TextChannel).send(finishMsg);
+    await interaction.deleteReply();
+  } catch (err) {
+    throw new CommandError('Could not complete registration');
+  }
 }
 
