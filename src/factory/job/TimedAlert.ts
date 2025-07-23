@@ -2,6 +2,7 @@ import { BaseMessageOptions, Client, roleMention, TextChannel } from "discord.js
 import { EmbedBuilderUtil, StringUtils } from "../../utils";
 import { logger } from "../../Logger";
 
+// Deprecated
 export class TimeAlert {
     private last_hour = "";
     private last_alert_msg = "";

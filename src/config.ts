@@ -7,7 +7,7 @@ const config = {
         PORT: 8080
     },
     SERVER: {
-        BATTLEMETRIC_ID: "26227572"
+        BATTLEMETRIC_ID: "34924241"
     },
     DISCORD: {
         NAME: "Happy Bot",
@@ -35,12 +35,6 @@ const config = {
                 EN: ["1016350933296349227", "1106429503607160864"],
             },
             STARTER_ROOM: ["1016360910656389150","1016608862780002344"]
-        },
-        EVENT: {
-            TIME_ALERT: {
-                ROLE: "1299504702228271134",
-                CHANNEL: "1195842266066075688",
-            }
         }
     },
 }
