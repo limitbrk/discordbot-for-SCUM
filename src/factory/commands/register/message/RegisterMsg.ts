@@ -8,7 +8,7 @@ export class RegisterMsg {
     private static readonly namespace: string = "register"; // Define the namespace
     private static readonly roomCh: string[] = config.SETTING.REGISTER.STARTER_ROOM.map((id:any) => channelMention(id))
 
-    public static init(): InteractionReplyOptions {
+    public static init(): InteractionEditReplyOptions {
         const _ = getFixedT(null, this.namespace);
 
         return {
@@ -25,7 +25,6 @@ export class RegisterMsg {
                     .setEmoji(_('command.btn.en.emoji'))
                     .setStyle(ButtonStyle.Primary),
             )],
-            flags: MessageFlags.Ephemeral,
         }
     }
     public static step1(lang: string, rule: string): InteractionEditReplyOptions {
