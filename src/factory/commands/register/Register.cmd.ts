@@ -1,4 +1,4 @@
-import { ButtonInteraction, channelMention, CommandInteraction, ComponentType, SlashCommandBuilder, TextChannel } from 'discord.js';
+import { ButtonInteraction, channelMention, CommandInteraction, ComponentType, MessageFlags, SlashCommandBuilder, TextChannel } from 'discord.js';
 import { t } from 'i18next';
 import config from '../../../config';
 import { RegisterMsg } from './message/RegisterMsg';
@@ -26,7 +26,7 @@ module.exports = {
 
   async execute(app: ApplicationFactory, interaction: CommandInteraction) {
     try {
-      await interaction.deferReply({ ephemeral: true }); // Defer to allow time for interaction processing
+      await interaction.deferReply({ flags: MessageFlags.Ephemeral}); // Defer to allow time for interaction processing
       const lang = await step0_initial(interaction);
       await step1_rules(interaction, lang);
       const steamProfile = await step2_modal(app.steamProfileRepo, interaction, lang);
