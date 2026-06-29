@@ -1,0 +1,64 @@
+{
+    "command": {
+        "help": "ลงทะเบียนผู้เล่น / Register Prisoner.",
+        "title": "กรุณาเลือกภาษา / Plese select language.",
+        "btn": {
+            "th": {
+                "text": "ไทย",
+                "emoji": "🇹🇭"
+            },
+            "en": {
+                "text": "English",
+                "emoji": "🔤"
+            }
+        }
+    },
+    "step1":{
+        "title": "กรุณาอ่านกฎก่อนไปต่อ...",
+        "desc": "{0}\n\n เมื่อเลือกปุ่ม **{1}{2}** แสดงว่าได้อ่านและยอมรับกฎอย่างถี่ถ้วนแล้ว.\n\n **ในขั้นตอนถัดไป ต้องการข้อมูล SteamID [หาได้ที่นี่](https://steamid.xyz)",
+        "btn": {
+            "next": {
+                "text": "ต่อไป",
+                "emoji": "⏩"
+            }
+        }
+    },
+    "step2":{
+        "title": "โปรดกรอกข้อมูล",
+        "question1": {
+            "label": "SteamID64 (หาได้จาก - steamid.xyz)",
+            "placeholder": "เลข 17 หลัก"
+        },
+        "question2": {
+            "label": "Rule Code (หาได้จากหน้ากฎ)",
+            "placeholder": "เลข 4 หลัก"
+        },
+        "btn": {
+            "next": {
+                "text": "ยืนยัน"
+            },
+            "back": {
+                "text": "ยกเลิก"
+            }
+        }
+    },
+    "step3":{
+        "title": "ยืนยันข้อมูล",
+        "desc": "โปรดเช็คว่าข้อมูลถูกต้อง",
+        "btn": {
+            "next": {
+                "text": "ใช่",
+                "emoji": "✔️"
+            },
+            "back": {
+                "text": "ไม่",
+                "emoji": "✖"
+            }
+        }
+    },
+    "finish":{
+        "msg": "┌ {0} ได้ใช้คำสั่ง `/register`",
+        "title": "ลงทะเบียนเรียบร้อย",
+        "desc": "สามารถเข้า Server ได้เลยที่ {0}\nรับของเริ่มต้น {1}"
+    }
+}

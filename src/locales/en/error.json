@@ -1,0 +1,15 @@
+{
+    "core":{
+        "errTitle":"Error",
+        "errDesc":"This is a internal error",
+        "errFooter":"Please contact admin. If any defect"
+    },
+    "INVALID_RULECODE":{
+        "title": "Invalid Rule Code",
+        "desc": "Go back to read rules. and use `/register` again."
+    },
+    "INVALID_STEAMID":{
+        "title": "Invalid SteamID",
+        "desc": "Please make sure you have typed valid SteamID."
+    }
+}

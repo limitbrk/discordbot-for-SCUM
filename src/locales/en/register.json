@@ -1,0 +1,64 @@
+{
+    "command": {
+        "help": "ลงทะเบียนผู้เล่น / Register Prisoner.",
+        "title": "กรุณาเลือกภาษา / Plese select language.",
+        "btn": {
+            "th": {
+                "text": "ไทย",
+                "emoji": "🇹🇭"
+            },
+            "en": {
+                "text": "English",
+                "emoji": "🔤"
+            }
+        }
+    },
+    "step1":{
+        "title": "Please read these rule before continue...",
+        "desc": "{0}\n\n When you click **{1}{2}** button that mean you have read and accepted.\n\n **Next step required [your SteamID](https://steamid.xyz)",
+        "btn": {
+            "next": {
+                "text": "Next",
+                "emoji": "⏩"
+            }
+        }
+    },
+    "step2":{
+        "title": "Fill Information",
+        "question1": {
+            "label": "SteamID64 (Can be find in - steamid.xyz)",
+            "placeholder": "17 digits"
+        },
+        "question2": {
+            "label": "Rule read code (In rule Channel)",
+            "placeholder": "4 digits"
+        },
+        "btn": {
+            "next": {
+                "text": "Submit"
+            },
+            "back": {
+                "text": "Cancel"
+            }
+        }
+    },
+    "step3":{
+        "title": "Info Confirmation",
+        "desc": "This is your Info?",
+        "btn": {
+            "next": {
+                "text": "Yes",
+                "emoji": "✔️"
+            },
+            "back": {
+                "text": "No",
+                "emoji": "✖"
+            }
+        }
+    },
+    "finish":{
+        "msg": "┌ {0} used command `/register`",
+        "title": "Register succeed",
+        "desc": "Can join our server here {0}\nWelcome pack is ready {1}"
+    }
+}

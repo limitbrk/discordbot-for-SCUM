@@ -2,3 +2,8 @@
 .gitignore
 readme.md
 template.env
+.env
+.prod.env
+dist/
+node_modules
+package-lock.json

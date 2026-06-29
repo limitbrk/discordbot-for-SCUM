@@ -1,0 +1,31 @@
+{
+  "name": "discordbot-for-scum",
+  "version": "1.1.0",
+  "main": "./src/index.ts",
+  "scripts": {
+    "dev": "ts-node ./src/index",
+    "build": "tsc && npm run copy",
+    "copy": "copyfiles package.json dist/ && copyfiles discloud.config dist/discloud.config",
+    "start": "node ./dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "discord.js": "^14.19.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "i18next": "^23.14.0",
+    "i18next-fs-backend": "^2.3.2",
+    "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "eslint": "^9.9.1",
+    "native-copyfiles": "^1.2.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
