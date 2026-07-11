@@ -11,7 +11,6 @@ export class ApplicationFactory{
         config: any
     ){
         this.steamProfileRepo = new SteamProfileRepositoryImpl(config.REPO.STEAM.TOKEN)
-        this.serverInfoRepo = new ServerInfoRepositoryImpl(config.SERVER.BATTLEMETRIC_ID)
-
+        this.serverInfoRepo = new ServerInfoRepositoryImpl(config.SERVER.STATS_API_URL, JSON.parse(config.SERVER.STATS_API_HEADERS))
     }
 }

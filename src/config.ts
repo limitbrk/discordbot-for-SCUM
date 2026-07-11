@@ -7,7 +7,8 @@ const config = {
         PORT: 8080
     },
     SERVER: {
-        BATTLEMETRIC_ID: "34924241"
+        STATS_API_URL: "https://api.battlemetrics.com/servers/38992550",
+        STATS_API_HEADERS: "{\"User-Agent\": \"SCUM-Discord-Bot/1.0\"}"
     },
     DISCORD: {
         NAME: "Happy Bot",
