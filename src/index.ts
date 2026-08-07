@@ -24,14 +24,11 @@ client.once(Events.ClientReady, (readyClient: Client<true>) => {
 			readyClient.user.setPresence(ps);
 			const status = ps.activities?.[0].name
 			logger.debug('updated: ' + status);
-			// if (status?.split(" ",2)[1] !== undefined){
-			// 	app.timeTrackJob.checkTime(client, status?.split(" ",2)[1].replace(/\D+/g,""))
-			// }
 		}).catch( (e :Error) => {
 			if (isinit) {
 				throw e 
 			}
-			logger.error(e);
+			logger.warn(e);
 		})
     }
     updateRichPresence(true);

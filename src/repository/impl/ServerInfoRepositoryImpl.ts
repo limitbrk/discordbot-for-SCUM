@@ -46,7 +46,7 @@ export class ServerInfoRepositoryImpl implements ServerInfoRepository {
             switch (this.apiType) {
                 case APIType.GGCON:
                     if (data.ok !== true) {
-                        throw new Error("Cannot get server info: " + data.toString());
+                        throw new Error("Cannot get server info: " + (data?.error || "Unknown error") + ": " + data?.reason);
                     }
                     return {
                         players: data.onlinePlayers,
